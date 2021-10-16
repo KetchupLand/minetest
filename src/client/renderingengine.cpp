@@ -440,15 +440,7 @@ void RenderingEngine::draw_load_screen(const std::wstring &text,
 			guienv->addStaticText(text.c_str(), textrect, false, false);
 	guitext->setTextAlignment(gui::EGUIA_CENTER, gui::EGUIA_UPPERLEFT);
 
-	bool cloud_menu_background = clouds && g_settings->getBool("menu_clouds");
-	if (cloud_menu_background) {
-		g_menuclouds->step(dtime * 3);
-		g_menuclouds->render();
-		get_video_driver()->beginScene(
-				true, true, video::SColor(255, 140, 186, 250));
-		g_menucloudsmgr->drawAll();
-	} else
-		get_video_driver()->beginScene(true, true, video::SColor(255, 0, 0, 0));
+	get_video_driver()->beginScene(true, true, video::SColor(255, 0, 0, 0));
 
 	// draw progress bar
 	if ((percent >= 0) && (percent <= 100)) {
@@ -501,15 +493,7 @@ void RenderingEngine::draw_load_screen(const std::wstring &text,
 void RenderingEngine::draw_menu_scene(gui::IGUIEnvironment *guienv,
 		float dtime, bool clouds)
 {
-	bool cloud_menu_background = clouds && g_settings->getBool("menu_clouds");
-	if (cloud_menu_background) {
-		g_menuclouds->step(dtime * 3);
-		g_menuclouds->render();
-		get_video_driver()->beginScene(
-				true, true, video::SColor(255, 140, 186, 250));
-		g_menucloudsmgr->drawAll();
-	} else
-		get_video_driver()->beginScene(true, true, video::SColor(255, 0, 0, 0));
+	get_video_driver()->beginScene(true, true, video::SColor(255, 0, 0, 0));
 
 	guienv->drawAll();
 	get_video_driver()->endScene();

@@ -998,10 +998,6 @@
 
 ## Menus
 
-#    Use a cloud animation for the main menu background.
-#    type: bool
-# menu_clouds = true
-
 #    Scale GUI by a user specified value.
 #    Use a nearest-neighbor-anti-alias filter to scale the GUI.
 #    This will smooth over some of the rough edges, and blend

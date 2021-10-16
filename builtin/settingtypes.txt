@@ -855,9 +855,6 @@ show_entity_selectionbox (Show entity selection boxes) bool false
 
 [*Menus]
 
-#    Use a cloud animation for the main menu background.
-menu_clouds (Clouds in menu) bool true
-
 #    Scale GUI by a user specified value.
 #    Use a nearest-neighbor-anti-alias filter to scale the GUI.
 #    This will smooth over some of the rough edges, and blend

@@ -61,11 +61,7 @@ function mm_texture.reset()
 	mm_texture.set_generic("header")
 
 	if not have_bg then
-		if core.settings:get_bool("menu_clouds") then
-			core.set_clouds(true)
-		else
-			mm_texture.set_dirt_bg()
-		end
+		mm_texture.set_dirt_bg()
 	end
 end
 
@@ -87,12 +83,7 @@ function mm_texture.update_game(gamedetails)
 	core.set_clouds(false)
 
 	if not have_bg then
-
-		if core.settings:get_bool("menu_clouds") then
-			core.set_clouds(true)
-		else
-			mm_texture.set_dirt_bg()
-		end
+		mm_texture.set_dirt_bg()
 	end
 
 	mm_texture.set_game("footer",gamedetails)
@@ -181,5 +172,5 @@ function mm_texture.set_dirt_bg()
 
 	-- Use universal fallback texture in textures/base/pack
 	local minimalpath = defaulttexturedir .. "menu_bg.png"
-	core.set_background("background", minimalpath, true, 128)
+	core.set_background("background", minimalpath, false, 128)
 end
