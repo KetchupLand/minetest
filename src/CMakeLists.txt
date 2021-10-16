@@ -1,4 +1,4 @@
-project(minetest)
+project(ketchupland)
 
 INCLUDE(CheckIncludeFiles)
 INCLUDE(CheckLibraryExists)
