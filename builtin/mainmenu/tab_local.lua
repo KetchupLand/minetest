@@ -74,37 +74,39 @@ if enable_gamebar then
 			end
 		end
 
-		local btnbar = buttonbar_create("game_button_bar",
+		if #pkgmgr.games ~= 1 then
+			local btnbar = buttonbar_create("game_button_bar",
 			game_buttonbar_button_handler,
 			{x=-0.3,y=5.9}, "horizontal", {x=12.4,y=1.15})
 
-		for i=1,#pkgmgr.games,1 do
-			local btn_name = "game_btnbar_" .. pkgmgr.games[i].id
+			for i=1,#pkgmgr.games,1 do
+				local btn_name = "game_btnbar_" .. pkgmgr.games[i].id
 
-			local image = nil
-			local text = nil
-			local tooltip = core.formspec_escape(pkgmgr.games[i].name)
+				local image = nil
+				local text = nil
+				local tooltip = core.formspec_escape(pkgmgr.games[i].name)
 
-			if pkgmgr.games[i].menuicon_path ~= nil and
-				pkgmgr.games[i].menuicon_path ~= "" then
-				image = core.formspec_escape(pkgmgr.games[i].menuicon_path)
-			else
+				if pkgmgr.games[i].menuicon_path ~= nil and
+					pkgmgr.games[i].menuicon_path ~= "" then
+					image = core.formspec_escape(pkgmgr.games[i].menuicon_path)
+				else
 
-				local part1 = pkgmgr.games[i].id:sub(1,5)
-				local part2 = pkgmgr.games[i].id:sub(6,10)
-				local part3 = pkgmgr.games[i].id:sub(11)
+					local part1 = pkgmgr.games[i].id:sub(1,5)
+					local part2 = pkgmgr.games[i].id:sub(6,10)
+					local part3 = pkgmgr.games[i].id:sub(11)
 
-				text = part1 .. "\n" .. part2
-				if part3 ~= nil and
-					part3 ~= "" then
-					text = text .. "\n" .. part3
+					text = part1 .. "\n" .. part2
+					if part3 ~= nil and
+						part3 ~= "" then
+						text = text .. "\n" .. part3
+					end
 				end
+				btnbar:add_button(btn_name, text, image, tooltip)
 			end
-			btnbar:add_button(btn_name, text, image, tooltip)
-		end
 
-		local plus_image = core.formspec_escape(defaulttexturedir .. "plus.png")
-		btnbar:add_button("game_open_cdb", "", plus_image, fgettext("Install games from ContentDB"))
+			local plus_image = core.formspec_escape(defaulttexturedir .. "plus.png")
+			btnbar:add_button("game_open_cdb", "", plus_image, fgettext("Install games from ContentDB"))
+		end
 	end
 else
 	-- Currently chosen game in gamebar: no gamebar -> no "current" game
@@ -377,7 +379,9 @@ if enable_gamebar then
 			end
 
 			singleplayer_refresh_gamebar()
-			ui.find_by_name("game_button_bar"):show()
+			if #pkgmgr.games ~= 1 then
+				ui.find_by_name("game_button_bar"):show()
+			end
 		else
 			menudata.worldlist:set_filtercriteria(nil)
 			local gamebar = ui.find_by_name("game_button_bar")
