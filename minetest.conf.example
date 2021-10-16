@@ -765,7 +765,7 @@
 
 #    Save window size automatically when modified.
 #    type: bool
-# autosave_screensize = true
+# autosave_screensize = false
 
 #    Fullscreen mode.
 #    type: bool

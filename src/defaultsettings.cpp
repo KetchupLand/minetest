@@ -177,7 +177,7 @@ void set_default_settings()
 #endif
 	settings->setDefault("screen_w", "1280");
 	settings->setDefault("screen_h", "720");
-	settings->setDefault("autosave_screensize", "true");
+	settings->setDefault("autosave_screensize", "false");
 	settings->setDefault("fullscreen", "false");
 	settings->setDefault("vsync", "false");
 	settings->setDefault("fov", "72");
