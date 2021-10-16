@@ -1113,7 +1113,7 @@ map_compression_level_net (Map Compression Level for Network Transfer) int -1 -1
 
 #    Default game when creating a new world.
 #    This will be overridden when creating a world from the main menu.
-default_game (Default game) string minetest
+default_game (Default game) string ketchupland
 
 #    Message of the day displayed to players connecting.
 motd (Message of the day) string
