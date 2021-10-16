@@ -206,8 +206,6 @@ if(RUN_IN_PLACE)
 	install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/textures/texture_packs_here.txt" DESTINATION "${SHAREDIR}/textures")
 endif()
 
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/games/minetest_game" DESTINATION "${SHAREDIR}/games/"
-	COMPONENT "SUBGAME_MINETEST_GAME" OPTIONAL PATTERN ".git*" EXCLUDE )
 install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/games/devtest" DESTINATION "${SHAREDIR}/games/"
 	COMPONENT "SUBGAME_MINIMAL" OPTIONAL PATTERN ".git*" EXCLUDE )
 
@@ -271,78 +269,17 @@ endif()
 add_subdirectory(src)
 
 
-# CPack
-
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A free open-source voxel game engine with easy modding and game creation.")
-set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH})
-set(CPACK_PACKAGE_VENDOR "celeron55")
-set(CPACK_PACKAGE_CONTACT "Perttu Ahola <celeron55@gmail.com>")
-
-include(CPackComponent)
-
-cpack_add_component(Docs
-	DISPLAY_NAME "Documentation"
-	DESCRIPTION "Documentation about Minetest and Minetest modding"
-)
-
-cpack_add_component(SUBGAME_MINETEST_GAME
-	DISPLAY_NAME "Minetest Game"
-	DESCRIPTION "The default game bundled in the Minetest engine. Mainly used as a modding base."
-	GROUP "Games"
-)
-
-cpack_add_component(SUBGAME_MINIMAL
-	DISPLAY_NAME "Development Test"
-	DESCRIPTION "A basic testing environment used for engine development and sometimes for testing mods."
-	DISABLED #DISABLED does not mean it is disabled, and is just not selected by default.
-	GROUP "Games"
-)
-
-cpack_add_component_group(Subgames
-	DESCRIPTION "Games for the Minetest engine."
-)
-
 if(WIN32)
 	# Include all dynamically linked runtime libaries such as MSVCRxxx.dll
 	include(InstallRequiredSystemLibraries)
 
-	if(RUN_IN_PLACE)
-		if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-			set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${VERSION_STRING}-win64")
-		else()
-			set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${VERSION_STRING}-win32")
-		endif()
-
-		set(CPACK_GENERATOR ZIP)
-
+	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+		set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${VERSION_STRING}-win64")
 	else()
-		set(CPACK_GENERATOR WIX)
-		set(CPACK_PACKAGE_NAME "${PROJECT_NAME_CAPITALIZED}")
-		set(CPACK_PACKAGE_INSTALL_DIRECTORY ".")
-		set(CPACK_PACKAGE_EXECUTABLES ${PROJECT_NAME} "${PROJECT_NAME_CAPITALIZED}")
-		set(CPACK_CREATE_DESKTOP_LINKS ${PROJECT_NAME})
-		set(CPACK_PACKAGING_INSTALL_PREFIX "/${PROJECT_NAME_CAPITALIZED}")
-
-		set(CPACK_WIX_PRODUCT_ICON "${CMAKE_CURRENT_SOURCE_DIR}/misc/minetest-icon.ico")
-		# Supported languages can be found at
-		# http://wixtoolset.org/documentation/manual/v3/wixui/wixui_localization.html
-		#set(CPACK_WIX_CULTURES "ar-SA,bg-BG,ca-ES,hr-HR,cs-CZ,da-DK,nl-NL,en-US,et-EE,fi-FI,fr-FR,de-DE")
-		set(CPACK_WIX_UI_BANNER "${CMAKE_CURRENT_SOURCE_DIR}/misc/CPACK_WIX_UI_BANNER.BMP")
-		set(CPACK_WIX_UI_DIALOG "${CMAKE_CURRENT_SOURCE_DIR}/misc/CPACK_WIX_UI_DIALOG.BMP")
-
-		set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/doc/lgpl-2.1.txt")
-
-		# The correct way would be to include both x32 and x64 into one installer
-		# and install the appropriate one.
-		# CMake does not support that, so there are two separate GUID's
-		if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-			set(CPACK_WIX_UPGRADE_GUID "745A0FB3-5552-44CA-A587-A91C397CCC56")
-		else()
-			set(CPACK_WIX_UPGRADE_GUID "814A2E2D-2779-4BBD-9ACD-FC3BD51FBBA2")
-		endif()
+		set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${VERSION_STRING}-win32")
 	endif()
+
+	set(CPACK_GENERATOR ZIP)
 elseif(APPLE)
 	set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY 0)
 	set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${VERSION_STRING}-osx")

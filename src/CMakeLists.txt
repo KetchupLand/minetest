@@ -744,7 +744,7 @@ else()
 			# Move text segment below LuaJIT's 47-bit limit (see issue #9367)
 			if(CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
 				# FreeBSD uses lld, and lld does not support -Ttext-segment, suggesting
-				# --image-base instead. Not sure if it's equivalent change for the purpose 
+				# --image-base instead. Not sure if it's equivalent change for the purpose
 				# but at least if fixes build on FreeBSD/aarch64
 				# XXX: the condition should also be changed to check for lld regardless of
 				# os, bit CMake doesn't have anything like CMAKE_LINKER_IS_LLD yet
@@ -880,13 +880,8 @@ if(BUILD_CLIENT)
 	endif()
 
 	# Install necessary fonts depending on configuration
-	if(USE_FREETYPE)
-		install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../fonts" DESTINATION "${SHAREDIR}"
-				FILES_MATCHING PATTERN "*.ttf" PATTERN "*.txt")
-	else()
-		install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../fonts" DESTINATION "${SHAREDIR}"
-				FILES_MATCHING PATTERN "*.png" PATTERN "*.xml")
-	endif()
+	install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../fonts" DESTINATION "${SHAREDIR}"
+			FILES_MATCHING PATTERN "*.ttf" PATTERN "*.txt")
 endif(BUILD_CLIENT)
 
 if(BUILD_SERVER)
