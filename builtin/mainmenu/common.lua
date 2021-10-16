@@ -131,8 +131,8 @@ function menu_render_worldlist()
 
 	for i, v in ipairs(current_worldlist) do
 		if retval ~= "" then retval = retval .. "," end
-		retval = retval .. core.formspec_escape(v.name) ..
-				" \\[" .. core.formspec_escape(v.gameid) .. "\\]"
+		retval = retval .. core.formspec_escape(v.name) --..
+				--" \\[" .. core.formspec_escape(v.gameid) .. "\\]"
 	end
 
 	return retval
