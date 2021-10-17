@@ -106,9 +106,7 @@ void parseModContents(ModSpec &spec)
 			spec.release = info.getS32("release");
 
 		// Attempt to load dependencies from mod.conf
-		bool mod_conf_has_depends = false;
 		if (info.exists("depends")) {
-			mod_conf_has_depends = true;
 			std::string dep = info.get("depends");
 			// clang-format off
 			dep.erase(std::remove_if(dep.begin(), dep.end(),
@@ -120,7 +118,6 @@ void parseModContents(ModSpec &spec)
 		}
 
 		if (info.exists("optional_depends")) {
-			mod_conf_has_depends = true;
 			std::string dep = info.get("optional_depends");
 			// clang-format off
 			dep.erase(std::remove_if(dep.begin(), dep.end(),
@@ -131,37 +128,8 @@ void parseModContents(ModSpec &spec)
 			}
 		}
 
-		// Fallback to depends.txt
-		if (!mod_conf_has_depends) {
-			std::vector<std::string> dependencies;
-
-			std::ifstream is((spec.path + DIR_DELIM + "depends.txt").c_str());
-
-			if (is.good())
-				spec.deprecation_msgs.push_back("depends.txt is deprecated, please use mod.conf instead.");
-
-			while (is.good()) {
-				std::string dep;
-				std::getline(is, dep);
-				dependencies.push_back(dep);
-			}
-
-			for (auto &dependency : dependencies) {
-				std::unordered_set<char> symbols;
-				if (parseDependsString(dependency, symbols)) {
-					if (symbols.count('?') != 0) {
-						spec.optdepends.insert(dependency);
-					} else {
-						spec.depends.insert(dependency);
-					}
-				}
-			}
-		}
-
 		if (info.exists("description"))
 			spec.desc = info.get("description");
-		else if (fs::ReadFile(spec.path + DIR_DELIM + "description.txt", spec.desc))
-			spec.deprecation_msgs.push_back("description.txt is deprecated, please use mod.conf instead.");
 	}
 }
 

@@ -11,7 +11,6 @@ Texture pack directory structure
     |-- Texture Pack
     |   |-- texture_pack.conf
     |   |-- screenshot.png
-    |   |-- description.txt
     |   |-- override.txt
     |   |-- your_texture_1.png
     |   |-- your_texture_2.png
@@ -27,12 +26,6 @@ A key-value config file with the following keys:
 
 * `title` - human readable title
 * `description` - short description, shown in the content tab
-
-### `description.txt`
-**Deprecated**, you should use texture_pack.conf instead.
-
-A file containing a short description of the texture pack to be shown in the
-content tab.
 
 ### `screenshot.png`
 A preview image showing an in-game screenshot of this texture pack; it will be
