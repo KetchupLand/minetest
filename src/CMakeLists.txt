@@ -207,6 +207,22 @@ if(ENABLE_REDIS)
 endif(ENABLE_REDIS)
 
 
+OPTION(ENABLE_DISCORD "Enable Discord Rich Presence" FALSE)
+set(USE_DISCORD FALSE)
+
+if(ENABLE_DISCORD)
+	find_library(DISCORD_LIBRARY discord-rpc)
+	find_path(DISCORD_INCLUDE_DIR discord_rpc.h PATH_SUFFIXES discord-rpc)
+	if(DISCORD_LIBRARY AND DISCORD_INCLUDE_DIR)
+		set(USE_DISCORD TRUE)
+		message(STATUS "Discord rich presence enabled.")
+		include_directories(${DISCORD_INCLUDE_DIR})
+	else(DISCORD_LIBRARY AND DISCORD_INCLUDE_DIR)
+		message(STATUS "Discord rich presence not found!")
+	endif(DISCORD_LIBRARY AND DISCORD_INCLUDE_DIR)
+endif(ENABLE_DISCORD)
+
+
 find_package(SQLite3 REQUIRED)
 
 
@@ -593,6 +609,9 @@ if(BUILD_CLIENT)
 	endif()
 	if (USE_REDIS)
 		target_link_libraries(${PROJECT_NAME} ${REDIS_LIBRARY})
+	endif()
+	if (USE_DISCORD)
+		target_link_libraries(${PROJECT_NAME} ${DISCORD_LIBRARY})
 	endif()
 	if (USE_PROMETHEUS)
 		target_link_libraries(${PROJECT_NAME} ${PROMETHEUS_LIBRARIES})
