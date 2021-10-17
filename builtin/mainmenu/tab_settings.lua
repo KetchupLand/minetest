@@ -23,16 +23,6 @@ local labels = {
 		fgettext("Simple Leaves"),
 		fgettext("Fancy Leaves")
 	},
-	node_highlighting = {
-		fgettext("Node Outlining"),
-		fgettext("Node Highlighting"),
-		fgettext("None")
-	},
-	filters = {
-		fgettext("No Filter"),
-		fgettext("Bilinear Filter"),
-		fgettext("Trilinear Filter")
-	},
 	mipmap = {
 		fgettext("No Mipmap"),
 		fgettext("Mipmap"),
@@ -59,14 +49,6 @@ local dd_options = {
 		table.concat(labels.leaves, ","),
 		{"opaque", "simple", "fancy"}
 	},
-	node_highlighting = {
-		table.concat(labels.node_highlighting, ","),
-		{"box", "halo", "none"}
-	},
-	filters = {
-		table.concat(labels.filters, ","),
-		{"", "bilinear_filter", "trilinear_filter"}
-	},
 	mipmap = {
 		table.concat(labels.mipmap, ","),
 		{"", "mip_map", "anisotropic_filter"}
@@ -86,22 +68,6 @@ local getSettingIndex = {
 		local style = core.settings:get("leaves_style")
 		for idx, name in pairs(dd_options.leaves[2]) do
 			if style == name then return idx end
-		end
-		return 1
-	end,
-	NodeHighlighting = function()
-		local style = core.settings:get("node_highlighting")
-		for idx, name in pairs(dd_options.node_highlighting[2]) do
-			if style == name then return idx end
-		end
-		return 1
-	end,
-	Filter = function()
-		if core.settings:get(dd_options.filters[2][3]) == "true" then
-			return 3
-		elseif core.settings:get(dd_options.filters[2][3]) == "false" and
-				core.settings:get(dd_options.filters[2][2]) == "true" then
-			return 2
 		end
 		return 1
 	end,
@@ -156,18 +122,14 @@ local function formspec(tabview, name, tabdata)
 				.. dump(core.settings:get_bool("opaque_water")) .. "]" ..
 		"checkbox[0.25,2.0;cb_connected_glass;" .. fgettext("Connected Glass") .. ";"
 				.. dump(core.settings:get_bool("connected_glass")) .. "]" ..
-		"dropdown[0.25,2.8;3.5;dd_node_highlighting;" .. dd_options.node_highlighting[1] .. ";"
-				.. getSettingIndex.NodeHighlighting() .. "]" ..
-		"dropdown[0.25,3.6;3.5;dd_leaves_style;" .. dd_options.leaves[1] .. ";"
+		"dropdown[0.25,2.8;3.5;dd_leaves_style;" .. dd_options.leaves[1] .. ";"
 				.. getSettingIndex.Leaves() .. "]" ..
 		"box[4,0;3.75,4.5;#999999]" ..
-		"label[4.25,0.1;" .. fgettext("Texturing:") .. "]" ..
-		"dropdown[4.25,0.55;3.5;dd_filters;" .. dd_options.filters[1] .. ";"
-				.. getSettingIndex.Filter() .. "]" ..
-		"dropdown[4.25,1.35;3.5;dd_mipmap;" .. dd_options.mipmap[1] .. ";"
+		"label[4.25,0.1;" .. fgettext("Mipmapping:") .. "]" ..
+		"dropdown[4.25,0.55;3.5;dd_mipmap;" .. dd_options.mipmap[1] .. ";"
 				.. getSettingIndex.Mipmap() .. "]" ..
-		"label[4.25,2.15;" .. fgettext("Antialiasing:") .. "]" ..
-		"dropdown[4.25,2.6;3.5;dd_antialiasing;" .. dd_options.antialiasing[1] .. ";"
+		"label[4.25,1.45;" .. fgettext("Antialiasing:") .. "]" ..
+		"dropdown[4.25,1.9;3.5;dd_antialiasing;" .. dd_options.antialiasing[1] .. ";"
 				.. getSettingIndex.Antialiasing() .. "]" ..
 		"label[4.25,3.45;" .. fgettext("Screen:") .. "]" ..
 		"checkbox[4.25,3.6;cb_autosave_screensize;" .. fgettext("Autosave Screen Size") .. ";"
@@ -310,25 +272,6 @@ local function handle_settings_buttons(this, fields, tabname, tabdata)
 			core.settings:set("leaves_style", dd_options.leaves[2][i])
 			ddhandled = true
 		end
-	end
-	for i = 1, #labels.node_highlighting do
-		if fields["dd_node_highlighting"] == labels.node_highlighting[i] then
-			core.settings:set("node_highlighting", dd_options.node_highlighting[2][i])
-			ddhandled = true
-		end
-	end
-	if fields["dd_filters"] == labels.filters[1] then
-		core.settings:set("bilinear_filter", "false")
-		core.settings:set("trilinear_filter", "false")
-		ddhandled = true
-	elseif fields["dd_filters"] == labels.filters[2] then
-		core.settings:set("bilinear_filter", "true")
-		core.settings:set("trilinear_filter", "false")
-		ddhandled = true
-	elseif fields["dd_filters"] == labels.filters[3] then
-		core.settings:set("bilinear_filter", "false")
-		core.settings:set("trilinear_filter", "true")
-		ddhandled = true
 	end
 	if fields["dd_mipmap"] == labels.mipmap[1] then
 		core.settings:set("mip_map", "false")
