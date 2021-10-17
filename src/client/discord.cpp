@@ -17,6 +17,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#ifndef __ANDROID__
 #include "discord.h"
 #include <ctime>
 #include "discord_rpc.h"
@@ -110,3 +111,4 @@ void Discord::handleDiscordError(int errcode, const char *message)
 	errorstream << "Error discord : " << std::to_string(errcode) << " " << message
 		    << std::endl;
 }
+#endif
