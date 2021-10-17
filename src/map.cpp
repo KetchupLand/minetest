@@ -37,7 +37,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "environment.h"
 #include "reflowscan.h"
 #include "emerge.h"
-#include "mapgen/mapgen_v6.h"
 #include "mapgen/mg_biome.h"
 #include "config.h"
 #include "server.h"

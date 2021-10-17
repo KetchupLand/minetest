@@ -69,28 +69,6 @@ local flag_checkboxes = {
 		{ "terrain", fgettext("Additional terrain"), "terrain",
 		fgettext("Generate non-fractal terrain: Oceans and underground") },
 	},
-	v6 = {
-		{ "trees", fgettext("Trees and jungle grass"), "trees" },
-		{ "flat", fgettext("Flat terrain"), "flat" },
-		{ "mudflow", fgettext("Mud flow"), "mudflow",
-		fgettext("Terrain surface erosion") },
-		-- Biome settings are in mgv6_biomes below
-	},
-}
-
-local mgv6_biomes = {
-	{
-		fgettext("Temperate, Desert, Jungle, Tundra, Taiga"),
-		{jungles = true, snowbiomes = true}
-	},
-	{
-		fgettext("Temperate, Desert, Jungle"),
-		{jungles = true, snowbiomes = false}
-	},
-	{
-		fgettext("Temperate, Desert"),
-		{jungles = false, snowbiomes = false}
-	},
 }
 
 local function create_world_formspec(dialogdata)
@@ -114,7 +92,6 @@ local function create_world_formspec(dialogdata)
 	local flags = {
 		main = core.settings:get_flags("mg_flags"),
 		v5 = core.settings:get_flags("mgv5_spflags"),
-		v6 = core.settings:get_flags("mgv6_spflags"),
 		v7 = core.settings:get_flags("mgv7_spflags"),
 		fractal = core.settings:get_flags("mgfractal_spflags"),
 		carpathian = core.settings:get_flags("mgcarpathian_spflags"),
@@ -208,11 +185,7 @@ local function create_world_formspec(dialogdata)
 
 		local d_name = fgettext("Decorations")
 		local d_tt
-		if mapgen == "v6" then
-			d_tt = fgettext("Structures appearing on the terrain (no effect on trees and jungle grass created by v6)")
-		else
-			d_tt = fgettext("Structures appearing on the terrain, typically trees and plants")
-		end
+		d_tt = fgettext("Structures appearing on the terrain, typically trees and plants")
 		form = form .. "checkbox[0,"..y..";flag_mg_decorations;" ..
 			d_name .. ";" ..
 			strflag(flags.main, "decorations").."]" ..
@@ -245,42 +218,6 @@ local function create_world_formspec(dialogdata)
 			end
 			y = y + 0.5
 		end
-
-		if mapgen ~= "v6" then
-			-- No special treatment
-			return form, y
-		end
-		-- Special treatment for v6 (add biome widgets)
-
-		-- Biome type (jungles, snowbiomes)
-		local biometype
-		if flags.v6.snowbiomes == true then
-			biometype = 1
-		elseif flags.v6.jungles == true  then
-			biometype = 2
-		else
-			biometype = 3
-		end
-		y = y + 0.3
-
-		form = form .. "label[0,"..(y+0.1)..";" .. fgettext("Biomes") .. "]"
-		y = y + 0.6
-
-		form = form .. "dropdown[0,"..y..";6.3;mgv6_biomes;"
-		for b=1, #mgv6_biomes do
-			form = form .. mgv6_biomes[b][1]
-			if b < #mgv6_biomes then
-				form = form .. ","
-			end
-		end
-		form = form .. ";" .. biometype.. "]"
-
-		-- biomeblend
-		y = y + 0.55
-		form = form .. "checkbox[0,"..y..";flag_mgv6_biomeblend;" ..
-			fgettext("Biome blending") .. ";"..strflag(flags.v6, "biomeblend").."]" ..
-			"tooltip[flag_mgv6_biomeblend;" ..
-			fgettext("Smooth transition between biomes") .. "]"
 
 		return form, y
 	end
@@ -440,20 +377,6 @@ local function create_world_buttonhandler(this, fields)
 	if fields["world_create_cancel"] then
 		this:delete()
 		return true
-	end
-
-	if fields["mgv6_biomes"] then
-		local entry = core.formspec_escape(fields["mgv6_biomes"])
-		for b=1, #mgv6_biomes do
-			if entry == mgv6_biomes[b][1] then
-				local ftable = core.settings:get_flags("mgv6_spflags")
-				ftable.jungles = mgv6_biomes[b][2].jungles
-				ftable.snowbiomes = mgv6_biomes[b][2].snowbiomes
-				local flags = table_to_flags(ftable)
-				core.settings:set("mgv6_spflags", flags)
-				return true
-			end
-		end
 	end
 
 	if fields["dd_mapgen"] then

@@ -333,36 +333,6 @@ Deprecated for non-V6 mapgens, define cave liquids in biome definitions instead.
 Fallback node used if dungeon nodes are not defined in biome definitions.
 Deprecated for non-V6 mapgens, define dungeon nodes in biome definitions instead.
 
-### Aliases needed for Mapgen V6
-
-* mapgen_stone
-* mapgen_water_source
-* mapgen_lava_source
-* mapgen_dirt
-* mapgen_dirt_with_grass
-* mapgen_sand
-* mapgen_gravel
-* mapgen_desert_stone
-* mapgen_desert_sand
-* mapgen_dirt_with_snow
-* mapgen_snowblock
-* mapgen_snow
-* mapgen_ice
-
-* mapgen_tree
-* mapgen_leaves
-* mapgen_apple
-* mapgen_jungletree
-* mapgen_jungleleaves
-* mapgen_junglegrass
-* mapgen_pine_tree
-* mapgen_pine_needles
-
-* mapgen_cobble
-* mapgen_stair_cobble
-* mapgen_mossycobble
-* mapgen_stair_desert_stone
-
 ### Setting the node used in Mapgen Singlenode
 
 By default the world is filled with air nodes. To set a different node use, for

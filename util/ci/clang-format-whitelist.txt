@@ -243,8 +243,6 @@ src/mapgen/mapgen_singlenode.cpp
 src/mapgen/mapgen_singlenode.h
 src/mapgen/mapgen_v5.cpp
 src/mapgen/mapgen_v5.h
-src/mapgen/mapgen_v6.cpp
-src/mapgen/mapgen_v6.h
 src/mapgen/mapgen_v7.cpp
 src/mapgen/mapgen_v7.h
 src/mapgen/mapgen_valleys.cpp

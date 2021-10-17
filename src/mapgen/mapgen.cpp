@@ -45,7 +45,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "mapgen_flat.h"
 #include "mapgen_fractal.h"
 #include "mapgen_v5.h"
-#include "mapgen_v6.h"
 #include "mapgen_v7.h"
 #include "mapgen_valleys.h"
 #include "mapgen_singlenode.h"
@@ -83,7 +82,6 @@ struct MapgenDesc {
 ////
 
 // Order used here defines the order of appearence in mainmenu.
-// v6 always last to discourage selection.
 // Special mapgens flat, fractal, singlenode, next to last. Of these, singlenode
 // last to discourage selection.
 // Of the remaining, v5 last due to age, v7 first due to being the default.
@@ -96,7 +94,6 @@ static MapgenDesc g_reg_mapgens[] = {
 	{"flat",       true},
 	{"fractal",    true},
 	{"singlenode", true},
-	{"v6",         true},
 };
 
 STATIC_ASSERT(
@@ -170,8 +167,6 @@ Mapgen *Mapgen::createMapgen(MapgenType mgtype, MapgenParams *params,
 		return new MapgenSinglenode((MapgenSinglenodeParams *)params, emerge);
 	case MAPGEN_V5:
 		return new MapgenV5((MapgenV5Params *)params, emerge);
-	case MAPGEN_V6:
-		return new MapgenV6((MapgenV6Params *)params, emerge);
 	case MAPGEN_V7:
 		return new MapgenV7((MapgenV7Params *)params, emerge);
 	case MAPGEN_VALLEYS:
@@ -195,8 +190,6 @@ MapgenParams *Mapgen::createMapgenParams(MapgenType mgtype)
 		return new MapgenSinglenodeParams;
 	case MAPGEN_V5:
 		return new MapgenV5Params;
-	case MAPGEN_V6:
-		return new MapgenV6Params;
 	case MAPGEN_V7:
 		return new MapgenV7Params;
 	case MAPGEN_VALLEYS:

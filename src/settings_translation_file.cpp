@@ -770,8 +770,6 @@ fake_function() {
 	gettext("3D noise defining terrain.");
 	gettext("Dungeon noise");
 	gettext("3D noise that determines number of dungeons per mapchunk.");
-	gettext("Mapgen V6");
-	gettext("Mapgen V6 specific flags");
 	gettext("Map generation attributes specific to Mapgen v6.\nThe 'snowbiomes' flag enables the new 5 biome system.\nWhen the 'snowbiomes' flag is enabled jungles are automatically enabled and\nthe 'jungles' flag is ignored.");
 	gettext("Desert noise threshold");
 	gettext("Deserts occur when np_biome exceeds this value.\nWhen the 'snowbiomes' flag is enabled, this is ignored.");
