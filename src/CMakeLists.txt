@@ -54,8 +54,8 @@ if(NOT USE_CURL)
 	endif()
 endif()
 
-
-option(ENABLE_GETTEXT "Use GetText for internationalization" ${BUILD_CLIENT})
+# Set to false by default temporarily due to issues with compilation
+option(ENABLE_GETTEXT "Use GetText for internationalization" FALSE)
 set(USE_GETTEXT FALSE)
 
 if(ENABLE_GETTEXT)
