@@ -35,10 +35,10 @@ jobs:
     - name: Save armeabi artifact
       uses: actions/upload-artifact@v2
       with:
-        name: Minetest-armeabi-v7a.apk
+        name: KetchupLand-armeabi-v7a.apk
         path: android/app/build/outputs/apk/release/app-armeabi-v7a-release-unsigned.apk
     - name: Save arm64 artifact
       uses: actions/upload-artifact@v2
       with:
-        name: Minetest-arm64-v8a.apk
+        name: KetchupLand-arm64-v8a.apk
         path: android/app/build/outputs/apk/release/app-arm64-v8a-release-unsigned.apk
