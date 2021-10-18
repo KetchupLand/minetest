@@ -17,6 +17,11 @@
 
 --------------------------------------------------------------------------------
 
+local kl_devs = {
+	"Danil_2461",
+	"ROllerozxa"
+}
+
 local core_developers = {
 	"Perttu Ahola (celeron55) <celeron55@gmail.com>",
 	"sfan5 <sfan5@live.de>",
@@ -88,10 +93,15 @@ local previous_contributors = {
 	"Jeija <jeija@mesecons.net> [HTTP, particles]",
 }
 
+local toptext = [[
+KetchupLand and the KetchupLand Launcher makes use of
+the free and open source Minetest voxel game engine.
+]]
+
 local function buildCreditList(source)
 	local ret = {}
 	for i = 1, #source do
-		ret[i] = core.formspec_escape(source[i])
+		ret[i] = core.formspec_escape("- "..source[i])
 	end
 	return table.concat(ret, ",,")
 end
@@ -102,20 +112,26 @@ return {
 	cbf_formspec = function(tabview, name, tabdata)
 		local logofile = defaulttexturedir .. "logo.png"
 		local version = core.get_version()
-		local fs = "image[0.75,0.5;2.2,2.2;" .. core.formspec_escape(logofile) .. "]" ..
+		-- How do you get a convict to confess? Force them to mod Minetest formspecs for 10 minutes.
+		local fs = kl_formspec_styling()..
+			"image[0.75,0.5;2.2,2.2;" .. core.formspec_escape(logofile) .. "]" ..
 			"style[label_button;border=false]" ..
 			"button[0.5,2;2.5,2;label_button;" .. version.project .. " " .. version.string .. "]" ..
 			"button[0.75,2.75;2,2;homepage;minetest.net]" ..
 			"tablecolumns[color;text]" ..
 			"tableoptions[background=#00000000;highlight=#00000000;border=false]" ..
 			"table[3.5,-0.25;8.5,6.05;list_credits;" ..
-			"#FFFF00," .. fgettext("Core Developers") .. ",," ..
+			"#FF0000,Credits:,,," ..
+			"#FFFF00," .. fgettext("KetchupLand Developers") .. ",," ..
+			buildCreditList(kl_devs) .. ",,," ..
+			",,#00FF00," .. toptext .. ",,," ..
+			"#FFFF00," .. fgettext("Minetest Core Developers") .. ",," ..
 			buildCreditList(core_developers) .. ",,," ..
-			"#FFFF00," .. fgettext("Active Contributors") .. ",," ..
+			"#FFFF00," .. fgettext("Minetest Active Contributors") .. ",," ..
 			buildCreditList(active_contributors) .. ",,," ..
-			"#FFFF00," .. fgettext("Previous Core Developers") ..",," ..
+			"#FFFF00," .. fgettext("Minetest Previous Core Developers") ..",," ..
 			buildCreditList(previous_core_developers) .. ",,," ..
-			"#FFFF00," .. fgettext("Previous Contributors") .. ",," ..
+			"#FFFF00," .. fgettext("Minetest Previous Contributors") .. ",," ..
 			buildCreditList(previous_contributors) .. "," ..
 			";1]"
 

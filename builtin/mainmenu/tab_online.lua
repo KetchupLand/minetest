@@ -65,6 +65,7 @@ local function get_formspec(tabview, name, tabdata)
 	end
 
 	local retval =
+		kl_formspec_styling()..
 		-- Search
 		"field[0.25,0.25;7,0.75;te_search;;" .. core.formspec_escape(tabdata.search_for) .. "]" ..
 		"container[7.25,0.25]" ..

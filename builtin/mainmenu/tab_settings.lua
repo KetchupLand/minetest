@@ -111,7 +111,8 @@ end
 
 local function formspec(tabview, name, tabdata)
 	local tab_string =
-		"box[0,0;3.75,4.5;#999999]" ..
+		kl_formspec_styling()..
+		"box[0,0;3.75,4.5;#1f1f1f]" ..
 		"checkbox[0.25,0;cb_smooth_lighting;" .. fgettext("Smooth Lighting") .. ";"
 				.. dump(core.settings:get_bool("smooth_lighting")) .. "]" ..
 		"checkbox[0.25,0.5;cb_particles;" .. fgettext("Particles") .. ";"
@@ -124,17 +125,17 @@ local function formspec(tabview, name, tabdata)
 				.. dump(core.settings:get_bool("connected_glass")) .. "]" ..
 		"dropdown[0.25,2.8;3.5;dd_leaves_style;" .. dd_options.leaves[1] .. ";"
 				.. getSettingIndex.Leaves() .. "]" ..
-		"box[4,0;3.75,4.5;#999999]" ..
+		"box[4,0;3.75,4.5;#1f1f1f]" ..
 		"label[4.25,0.1;" .. fgettext("Mipmapping:") .. "]" ..
 		"dropdown[4.25,0.55;3.5;dd_mipmap;" .. dd_options.mipmap[1] .. ";"
 				.. getSettingIndex.Mipmap() .. "]" ..
 		"label[4.25,1.45;" .. fgettext("Antialiasing:") .. "]" ..
 		"dropdown[4.25,1.9;3.5;dd_antialiasing;" .. dd_options.antialiasing[1] .. ";"
 				.. getSettingIndex.Antialiasing() .. "]" ..
-		"label[4.25,3.45;" .. fgettext("Screen:") .. "]" ..
-		"checkbox[4.25,3.6;cb_autosave_screensize;" .. fgettext("Autosave Screen Size") .. ";"
-				.. dump(core.settings:get_bool("autosave_screensize")) .. "]" ..
-		"box[8,0;3.75,4.5;#999999]"
+		"label[4.25,3.4;(NYI, Always on)]"..
+		"checkbox[4.25,3.6;cb_discord_rpc;" .. fgettext("Discord Rich Presence") .. ";"
+				.. dump(core.settings:get_bool("discord_rpc")) .. "]" ..
+		"box[8,0;3.75,4.5;#1f1f1f]"
 
 	local video_driver = core.settings:get("video_driver")
 	local shaders_enabled = core.settings:get_bool("enable_shaders")
@@ -232,8 +233,8 @@ local function handle_settings_buttons(this, fields, tabname, tabdata)
 		core.settings:set("connected_glass", fields["cb_connected_glass"])
 		return true
 	end
-	if fields["cb_autosave_screensize"] then
-		core.settings:set("autosave_screensize", fields["cb_autosave_screensize"])
+	if fields["cb_discord_rpc"] then
+		core.settings:set("discord_rpc", fields["cb_discord_rpc"])
 		return true
 	end
 	if fields["cb_shaders"] then

@@ -53,6 +53,7 @@ local function get_formspec(tabview, name, tabdata)
 
 
 	local retval =
+		kl_formspec_styling()..
 		"label[0.05,-0.25;".. fgettext("Installed Packages:") .. "]" ..
 		"tablecolumns[color;tree;text]" ..
 		"table[0,0.25;5.1,4.3;pkglist;" ..

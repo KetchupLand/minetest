@@ -238,3 +238,11 @@ function menu_worldmt_legacy(selected)
 		end
 	end
 end
+
+
+function kl_formspec_styling()
+	return	"background9[0,0;0,0;"..defaulttexturedir.."kl_background.png;true;5]"..
+		"style_type[button;border=false;bgimg="..defaulttexturedir.."kl_background.png;bgimg_pressed="..defaulttexturedir.."kl_btn_bg_pressed.png;bgimg_middle=5,5;textcolor=#000000]"..
+		"style_type[label;textcolor=#000000]"..
+		"style_type[checkbox;textcolor=#000000]"
+end

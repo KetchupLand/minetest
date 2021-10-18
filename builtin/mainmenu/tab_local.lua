@@ -142,7 +142,7 @@ local function get_disabled_settings(game)
 end
 
 local function get_formspec(tabview, name, tabdata)
-	local retval = ""
+	local retval = kl_formspec_styling().."box[-0.1,-0.1;3.8,5.7;#1f1f1f]"
 
 	local index = filterlist.get_current_index(menudata.worldlist,
 				tonumber(core.settings:get("mainmenu_last_selected_world")))
