@@ -1784,10 +1784,6 @@
 #    type: int
 # curl_file_download_timeout = 300000
 
-#    Replaces the default main menu with a custom one.
-#    type: string
-# main_menu_script =
-
 #    Print the engine's profiling data in regular intervals (in seconds).
 #    0 = disable. Useful for developers.
 #    type: int

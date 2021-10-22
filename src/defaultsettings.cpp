@@ -299,7 +299,6 @@ void set_default_settings()
 	settings->setDefault("joystick_deadzone", "2048");
 
 	// Main menu
-	settings->setDefault("main_menu_path", "");
 	settings->setDefault("serverlist_file", "favoriteservers.json");
 
 #if USE_FREETYPE
