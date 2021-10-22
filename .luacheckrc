@@ -80,3 +80,5 @@ files["builtin/common/tests"] = {
 		"assert",
 	},
 }
+
+max_line_length = false
