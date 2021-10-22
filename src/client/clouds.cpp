@@ -35,11 +35,6 @@ scene::ISceneManager *g_menucloudsmgr = NULL;
 // Constant for now
 static constexpr const float cloud_size = BS * 64.0f;
 
-static void cloud_3d_setting_changed(const std::string &settingname, void *data)
-{
-	((Clouds *)data)->readSettings();
-}
-
 Clouds::Clouds(scene::ISceneManager* mgr,
 		s32 id,
 		u32 seed
@@ -64,16 +59,12 @@ Clouds::Clouds(scene::ISceneManager* mgr,
 	m_params.speed         = v2f(0.0f, -2.0f);
 
 	readSettings();
-	g_settings->registerChangedCallback("enable_3d_clouds",
-		&cloud_3d_setting_changed, this);
 
 	updateBox();
 }
 
 Clouds::~Clouds()
 {
-	g_settings->deregisterChangedCallback("enable_3d_clouds",
-		&cloud_3d_setting_changed, this);
 }
 
 void Clouds::OnRegisterSceneNode()
@@ -101,9 +92,8 @@ void Clouds::render()
 
 	ScopeProfiler sp(g_profiler, "Clouds::render()", SPT_AVG);
 
-	int num_faces_to_draw = m_enable_3d ? 6 : 1;
-
-	m_material.setFlag(video::EMF_BACK_FACE_CULLING, m_enable_3d);
+	// TODO: cloud 3d removal todo
+	m_material.setFlag(video::EMF_BACK_FACE_CULLING, false);
 
 	driver->setTransform(video::ETS_WORLD, AbsoluteTransformation);
 	driver->setMaterial(m_material);
@@ -218,101 +208,23 @@ void Clouds::render()
 
 		const f32 rx = cloud_size / 2.0f;
 		// if clouds are flat, the top layer should be at the given height
-		const f32 ry = m_enable_3d ? m_params.thickness * BS : 0.0f;
+		const f32 ry = 0.0f;
 		const f32 rz = cloud_size / 2;
 
-		for(int i=0; i<num_faces_to_draw; i++)
-		{
-			switch(i)
-			{
-			case 0:	// top
-				for (video::S3DVertex &vertex : v) {
-					vertex.Normal.set(0,1,0);
-				}
-				v[0].Pos.set(-rx, ry,-rz);
-				v[1].Pos.set(-rx, ry, rz);
-				v[2].Pos.set( rx, ry, rz);
-				v[3].Pos.set( rx, ry,-rz);
-				break;
-			case 1: // back
-				if (INAREA(xi, zi - 1, m_cloud_radius_i)) {
-					u32 j = GETINDEX(xi, zi - 1, m_cloud_radius_i);
-					if(grid[j])
-						continue;
-				}
-				for (video::S3DVertex &vertex : v) {
-					vertex.Color = c_side_1;
-					vertex.Normal.set(0,0,-1);
-				}
-				v[0].Pos.set(-rx, ry,-rz);
-				v[1].Pos.set( rx, ry,-rz);
-				v[2].Pos.set( rx,  0,-rz);
-				v[3].Pos.set(-rx,  0,-rz);
-				break;
-			case 2: //right
-				if (INAREA(xi + 1, zi, m_cloud_radius_i)) {
-					u32 j = GETINDEX(xi+1, zi, m_cloud_radius_i);
-					if(grid[j])
-						continue;
-				}
-				for (video::S3DVertex &vertex : v) {
-					vertex.Color = c_side_2;
-					vertex.Normal.set(1,0,0);
-				}
-				v[0].Pos.set( rx, ry,-rz);
-				v[1].Pos.set( rx, ry, rz);
-				v[2].Pos.set( rx,  0, rz);
-				v[3].Pos.set( rx,  0,-rz);
-				break;
-			case 3: // front
-				if (INAREA(xi, zi + 1, m_cloud_radius_i)) {
-					u32 j = GETINDEX(xi, zi + 1, m_cloud_radius_i);
-					if(grid[j])
-						continue;
-				}
-				for (video::S3DVertex &vertex : v) {
-					vertex.Color = c_side_1;
-					vertex.Normal.set(0,0,-1);
-				}
-				v[0].Pos.set( rx, ry, rz);
-				v[1].Pos.set(-rx, ry, rz);
-				v[2].Pos.set(-rx,  0, rz);
-				v[3].Pos.set( rx,  0, rz);
-				break;
-			case 4: // left
-				if (INAREA(xi-1, zi, m_cloud_radius_i)) {
-					u32 j = GETINDEX(xi-1, zi, m_cloud_radius_i);
-					if(grid[j])
-						continue;
-				}
-				for (video::S3DVertex &vertex : v) {
-					vertex.Color = c_side_2;
-					vertex.Normal.set(-1,0,0);
-				}
-				v[0].Pos.set(-rx, ry, rz);
-				v[1].Pos.set(-rx, ry,-rz);
-				v[2].Pos.set(-rx,  0,-rz);
-				v[3].Pos.set(-rx,  0, rz);
-				break;
-			case 5: // bottom
-				for (video::S3DVertex &vertex : v) {
-					vertex.Color = c_bottom;
-					vertex.Normal.set(0,-1,0);
-				}
-				v[0].Pos.set( rx,  0, rz);
-				v[1].Pos.set(-rx,  0, rz);
-				v[2].Pos.set(-rx,  0,-rz);
-				v[3].Pos.set( rx,  0,-rz);
-				break;
-			}
+		for (video::S3DVertex &vertex : v) {
+			vertex.Normal.set(0,1,0);
+		}
+		v[0].Pos.set(-rx, ry,-rz);
+		v[1].Pos.set(-rx, ry, rz);
+		v[2].Pos.set( rx, ry, rz);
+		v[3].Pos.set( rx, ry,-rz);
 
-			v3f pos(p0.X, m_params.height * BS, p0.Y);
-			pos -= intToFloat(m_camera_offset, BS);
+		v3f pos(p0.X, m_params.height * BS, p0.Y);
+		pos -= intToFloat(m_camera_offset, BS);
 
-			for (video::S3DVertex &vertex : v) {
-				vertex.Pos += pos;
-				vertices.push_back(vertex);
-			}
+		for (video::S3DVertex &vertex : v) {
+			vertex.Pos += pos;
+			vertices.push_back(vertex);
 		}
 	}
 	int quad_count = vertices.size() / 4;
@@ -348,26 +260,11 @@ void Clouds::update(const v3f &camera_p, const video::SColorf &color_diffuse)
 	m_color.g = core::clamp(color_diffuse.g * bright.g, ambient.g, 1.0f);
 	m_color.b = core::clamp(color_diffuse.b * bright.b, ambient.b, 1.0f);
 	m_color.a = bright.a;
-
-	// is the camera inside the cloud mesh?
-	m_camera_inside_cloud = false; // default
-	if (m_enable_3d) {
-		float camera_height = camera_p.Y - BS * m_camera_offset.Y;
-		if (camera_height >= m_box.MinEdge.Y &&
-				camera_height <= m_box.MaxEdge.Y) {
-			v2f camera_in_noise;
-			camera_in_noise.X = floor((camera_p.X - m_origin.X) / cloud_size + 0.5);
-			camera_in_noise.Y = floor((camera_p.Z - m_origin.Y) / cloud_size + 0.5);
-			bool filled = gridFilled(camera_in_noise.X, camera_in_noise.Y);
-			m_camera_inside_cloud = filled;
-		}
-	}
 }
 
 void Clouds::readSettings()
 {
 	m_cloud_radius_i = g_settings->getU16("cloud_radius");
-	m_enable_3d = g_settings->getBool("enable_3d_clouds");
 }
 
 bool Clouds::gridFilled(int x, int y) const

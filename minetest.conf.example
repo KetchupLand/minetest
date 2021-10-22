@@ -537,10 +537,6 @@
 #    type: bool
 # enable_clouds = true
 
-#    Use 3D cloud look instead of flat.
-#    type: bool
-# enable_3d_clouds = true
-
 #    Method used to highlight selected object.
 #    type: enum values: box, halo, none
 # node_highlighting = box

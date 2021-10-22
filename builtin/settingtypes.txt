@@ -478,9 +478,6 @@ smooth_lighting (Smooth lighting) bool true
 #    Clouds are a client side effect.
 enable_clouds (Clouds) bool true
 
-#    Use 3D cloud look instead of flat.
-enable_3d_clouds (3D clouds) bool true
-
 #    Method used to highlight selected object.
 node_highlighting (Node highlighting) enum box box,halo,none
 

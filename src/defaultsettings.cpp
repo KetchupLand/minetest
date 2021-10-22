@@ -207,7 +207,6 @@ void set_default_settings()
 	settings->setDefault("enable_clouds", "true");
 	settings->setDefault("view_bobbing_amount", "1.0");
 	settings->setDefault("fall_bobbing_amount", "0.03");
-	settings->setDefault("enable_3d_clouds", "true");
 	settings->setDefault("cloud_radius", "12");
 	settings->setDefault("menu_clouds", "true");
 	settings->setDefault("opaque_water", "false");
@@ -480,7 +479,6 @@ void set_default_settings()
 	settings->setDefault("emergequeue_limit_diskonly", "16");
 	settings->setDefault("emergequeue_limit_generate", "16");
 	settings->setDefault("max_block_generate_distance", "5");
-	settings->setDefault("enable_3d_clouds", "false");
 	settings->setDefault("fps_max", "30");
 	settings->setDefault("fps_max_unfocused", "10");
 	settings->setDefault("max_objects_per_block", "20");

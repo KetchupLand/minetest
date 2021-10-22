@@ -117,8 +117,6 @@ local function formspec(tabview, name, tabdata)
 				.. dump(core.settings:get_bool("smooth_lighting")) .. "]" ..
 		"checkbox[0.25,0.5;cb_particles;" .. fgettext("Particles") .. ";"
 				.. dump(core.settings:get_bool("enable_particles")) .. "]" ..
-		"checkbox[0.25,1;cb_3d_clouds;" .. fgettext("3D Clouds") .. ";"
-				.. dump(core.settings:get_bool("enable_3d_clouds")) .. "]" ..
 		"checkbox[0.25,1.5;cb_opaque_water;" .. fgettext("Opaque Water") .. ";"
 				.. dump(core.settings:get_bool("opaque_water")) .. "]" ..
 		"checkbox[0.25,2.0;cb_connected_glass;" .. fgettext("Connected Glass") .. ";"
@@ -219,10 +217,6 @@ local function handle_settings_buttons(this, fields, tabname, tabdata)
 	end
 	if fields["cb_particles"] then
 		core.settings:set("enable_particles", fields["cb_particles"])
-		return true
-	end
-	if fields["cb_3d_clouds"] then
-		core.settings:set("enable_3d_clouds", fields["cb_3d_clouds"])
 		return true
 	end
 	if fields["cb_opaque_water"] then
