@@ -18,11 +18,6 @@
 --------------------------------------------------------------------------------
 
 local labels = {
-	leaves = {
-		fgettext("Opaque Leaves"),
-		fgettext("Simple Leaves"),
-		fgettext("Fancy Leaves")
-	},
 	mipmap = {
 		fgettext("No Mipmap"),
 		fgettext("Mipmap"),
@@ -45,10 +40,6 @@ local labels = {
 }
 
 local dd_options = {
-	leaves = {
-		table.concat(labels.leaves, ","),
-		{"opaque", "simple", "fancy"}
-	},
 	mipmap = {
 		table.concat(labels.mipmap, ","),
 		{"", "mip_map", "anisotropic_filter"}
@@ -64,13 +55,6 @@ local dd_options = {
 }
 
 local getSettingIndex = {
-	Leaves = function()
-		local style = core.settings:get("leaves_style")
-		for idx, name in pairs(dd_options.leaves[2]) do
-			if style == name then return idx end
-		end
-		return 1
-	end,
 	Mipmap = function()
 		if core.settings:get(dd_options.mipmap[2][3]) == "true" then
 			return 3
@@ -112,6 +96,7 @@ end
 local function formspec(tabview, name, tabdata)
 	local tab_string =
 		kl_formspec_styling()..
+		"style_type[label;textcolor=#FFFFFF]"..
 		"box[0,0;3.75,4.5;#1f1f1f]" ..
 		"checkbox[0.25,0;cb_smooth_lighting;" .. fgettext("Smooth Lighting") .. ";"
 				.. dump(core.settings:get_bool("smooth_lighting")) .. "]" ..
@@ -121,8 +106,6 @@ local function formspec(tabview, name, tabdata)
 				.. dump(core.settings:get_bool("opaque_water")) .. "]" ..
 		"checkbox[0.25,2.0;cb_connected_glass;" .. fgettext("Connected Glass") .. ";"
 				.. dump(core.settings:get_bool("connected_glass")) .. "]" ..
-		"dropdown[0.25,2.8;3.5;dd_leaves_style;" .. dd_options.leaves[1] .. ";"
-				.. getSettingIndex.Leaves() .. "]" ..
 		"box[4,0;3.75,4.5;#1f1f1f]" ..
 		"label[4.25,0.1;" .. fgettext("Mipmapping:") .. "]" ..
 		"dropdown[4.25,0.55;3.5;dd_mipmap;" .. dd_options.mipmap[1] .. ";"
@@ -154,7 +137,8 @@ local function formspec(tabview, name, tabdata)
 	end
 
 	tab_string = tab_string ..
-		"button[8,4.75;3.95,1;btn_change_keys;"
+		"style_type[label;textcolor=#000000]"
+		.."button[8,4.75;3.95,1;btn_change_keys;"
 		.. fgettext("Change Keys") .. "]"
 
 	tab_string = tab_string ..
@@ -262,12 +246,6 @@ local function handle_settings_buttons(this, fields, tabname, tabdata)
 	--Note dropdowns have to be handled LAST!
 	local ddhandled = false
 
-	for i = 1, #labels.leaves do
-		if fields["dd_leaves_style"] == labels.leaves[i] then
-			core.settings:set("leaves_style", dd_options.leaves[2][i])
-			ddhandled = true
-		end
-	end
 	if fields["dd_mipmap"] == labels.mipmap[1] then
 		core.settings:set("mip_map", "false")
 		core.settings:set("anisotropic_filter", "false")
