@@ -43,8 +43,8 @@ local flag_checkboxes = {
 		cb_caverns,
 		{ "ridges", fgettext("Rivers"), "ridges", tt_sea_rivers },
 		{ "mountains", fgettext("Mountains"), "mountains" },
-		{ "floatlands", fgettext("Floatlands (experimental)"), "floatlands",
-		fgettext("Floating landmasses in the sky") },
+		{ "floatlands", fgettext("Floatlands"), "floatlands",
+		fgettext("Floating landmasses in the sky. Experimental, use with caution!") },
 	},
 	carpathian = {
 		cb_caverns,
@@ -72,15 +72,10 @@ local flag_checkboxes = {
 }
 
 local function create_world_formspec(dialogdata)
-
 	-- Error out when no games found
 	if #pkgmgr.games == 0 then
-		return "size[12.25,3,true]" ..
-			"box[0,0;12,2;" .. mt_color_orange .. "]" ..
-			"textarea[0.3,0;11.7,2;;;"..
-			fgettext("You have no games installed.") .. "\n" ..
-			fgettext("Download one from minetest.net") .. "]" ..
-			"button[4.75,2.5;3,0.5;world_create_cancel;" .. fgettext("Cancel") .. "]"
+		error("No games found!")
+		return
 	end
 
 	local mapgens = core.get_mapgen_names()
@@ -111,41 +106,6 @@ local function create_world_formspec(dialogdata)
 
 	local game_by_gameidx = core.get_game(gameidx)
 	local disallowed_mapgen_settings = {}
-	if game_by_gameidx ~= nil then
-		local gamepath = game_by_gameidx.path
-		local gameconfig = Settings(gamepath.."/game.conf")
-
-		local allowed_mapgens = (gameconfig:get("allowed_mapgens") or ""):split()
-		for key, value in pairs(allowed_mapgens) do
-			allowed_mapgens[key] = value:trim()
-		end
-
-		local disallowed_mapgens = (gameconfig:get("disallowed_mapgens") or ""):split()
-		for key, value in pairs(disallowed_mapgens) do
-			disallowed_mapgens[key] = value:trim()
-		end
-
-		if #allowed_mapgens > 0 then
-			for i = #mapgens, 1, -1 do
-				if table.indexof(allowed_mapgens, mapgens[i]) == -1 then
-					table.remove(mapgens, i)
-				end
-			end
-		end
-
-		if disallowed_mapgens then
-			for i = #mapgens, 1, -1 do
-				if table.indexof(disallowed_mapgens, mapgens[i]) > 0 then
-					table.remove(mapgens, i)
-				end
-			end
-		end
-
-		local ds = (gameconfig:get("disallowed_mapgen_settings") or ""):split()
-		for _, value in pairs(ds) do
-			disallowed_mapgen_settings[value:trim()] = true
-		end
-	end
 
 	local mglist = ""
 	local selindex
@@ -175,18 +135,18 @@ local function create_world_formspec(dialogdata)
 			return "", y
 		end
 
-		local form = "checkbox[0," .. y .. ";flag_mg_caves;" ..
+		local form = "checkbox[0.1," .. y .. ";flag_mg_caves;" ..
 			fgettext("Caves") .. ";"..strflag(flags.main, "caves").."]"
 		y = y + 0.5
 
-		form = form .. "checkbox[0,"..y..";flag_mg_dungeons;" ..
+		form = form .. "checkbox[0.1,"..y..";flag_mg_dungeons;" ..
 			fgettext("Dungeons") .. ";"..strflag(flags.main, "dungeons").."]"
 		y = y + 0.5
 
 		local d_name = fgettext("Decorations")
 		local d_tt
 		d_tt = fgettext("Structures appearing on the terrain, typically trees and plants")
-		form = form .. "checkbox[0,"..y..";flag_mg_decorations;" ..
+		form = form .. "checkbox[0.1,"..y..";flag_mg_decorations;" ..
 			d_name .. ";" ..
 			strflag(flags.main, "decorations").."]" ..
 			"tooltip[flag_mg_decorations;" ..
@@ -210,7 +170,7 @@ local function create_world_formspec(dialogdata)
 		local form = ""
 		for _,tab in pairs(flag_checkboxes[mapgen]) do
 			local id = "flag_mg"..mapgen.."_"..tab[1]
-			form = form .. ("checkbox[0,%f;%s;%s;%s]"):
+			form = form .. ("checkbox[0.1,%f;%s;%s;%s]"):
 				format(y, id, tab[2], strflag(flags[mapgen], tab[3]))
 
 			if tab[4] then
@@ -228,7 +188,7 @@ local function create_world_formspec(dialogdata)
 	local y = y_start
 	local str_flags, str_spflags
 	local label_flags, label_spflags = "", ""
-	y = y + 0.3
+	y = y + 0.5
 	str_flags, y = mg_main_flags(current_mg, y)
 	if str_flags ~= "" then
 		label_flags = "label[0,"..y_start..";" .. fgettext("Mapgen flags") .. "]"
@@ -236,59 +196,62 @@ local function create_world_formspec(dialogdata)
 	else
 		y_start = 0.0
 	end
-	y = y_start + 0.3
+	y = y_start + 0.5
 	str_spflags = mg_specific_flags(current_mg, y)
 	if str_spflags ~= "" then
 		label_spflags = "label[0,"..y_start..";" .. fgettext("Mapgen-specific flags") .. "]"
 	end
 
-	-- Warning if only devtest is installed
-	local devtest_only = ""
-	local gamelist_height = 2.3
-	if #pkgmgr.games == 1 and pkgmgr.games[1].id == "devtest" then
-		devtest_only = "box[0,0;5.8,1.7;#ff8800]" ..
-				"textarea[0.3,0;6,1.8;;;"..
-				fgettext("Warning: The Development Test is meant for developers.") .. "\n" ..
-				fgettext("Download a game, such as Minetest Game, from minetest.net") .. "]"
-		gamelist_height = 0.5
+	-- Add a little funny thing if you select singlenode, which has no mapgen params.
+	if str_flags == '' then
+		str_flags = "label[1.3,2;... dust ...]"
 	end
 
-	local retval =
-		"size[12.25,7,true]" ..
+	--[[
+		:gsub("${common_styling}", kl_formspec_styling())
+		:gsub("${worldname}", core.formspec_escape(worldname))
+		:gsub("${current_seed}", current_seed)
+		:gsub("${mglist}", mglist)
+		:gsub("${selindex}", selindex)
+		:gsub("${gamelist}", pkgmgr.gamelist())
+		:gsub("${gameidx}", gameidx)
+		:gsub("${flags}", label_flags..str_flags..label_spflags..str_spflags)
+	]]
 
-		-- Left side
-		"container[0,0]"..
-		"field[0.3,0.6;6,0.5;te_world_name;" ..
-		fgettext("World name") ..
-		";" .. core.formspec_escape(worldname) .. "]" ..
+	return formspec_wrapper([[
+		formspec_version[4]
+		size[12.25,7,true]
 
-		"field[0.3,1.7;6,0.5;te_seed;" ..
-		fgettext("Seed") ..
-		";".. current_seed .. "]" ..
+		${common_styling}
 
-		"label[0,2;" .. fgettext("Mapgen") .. "]"..
-		"dropdown[0,2.5;6.3;dd_mapgen;" .. mglist .. ";" .. selindex .. "]" ..
+		container[0,0]
+		label[0.3,0.6;World name]
+		field[0.3,0.9;5.5,0.7;te_world_name;;${worldname}]
+		label[0.3,2;Seed]
+		field[0.3,2.3;5.5,0.7;te_seed;;${current_seed}]
+		label[0.3,3.5;Mapgen]
+		dropdown[0.3,3.9;5.5,0.8;dd_mapgen;${mglist};${selindex}]
+		textlist[-10,3.85;4,2;games;${gamelist};${gameidx};false]
+		container_end[]
 
-		"label[0,3.35;" .. fgettext("Game") .. "]"..
-		"textlist[0,3.85;5.8,"..gamelist_height..";games;" ..
-		pkgmgr.gamelist() .. ";" .. gameidx .. ";false]" ..
-		"container[0,4.5]" ..
-		devtest_only ..
-		"container_end[]" ..
-		"container_end[]" ..
+		box[6.15,0.3;5.5,5.2;#1f1f1f]
+		container[6.6,0.6]
+		style_type[label;textcolor=#ffffff]
+		${flags}
+		container_end[]
 
-		-- Right side
-		"container[6.2,0]"..
-		label_flags .. str_flags ..
-		label_spflags .. str_spflags ..
-		"container_end[]"..
-
-		-- Menu buttons
-		"button[3.25,6.5;3,0.5;world_create_confirm;" .. fgettext("Create") .. "]" ..
-		"button[6.25,6.5;3,0.5;world_create_cancel;" .. fgettext("Cancel") .. "]"
-
-	return retval
-
+		button[2.9,6;3,0.8;world_create_confirm;Create]
+		button[6.4,6;3,0.8;world_create_cancel;Cancel]
+	]], {
+		common_styling = kl_formspec_styling(),
+		worldname = core.formspec_escape(worldname),
+		current_seed = current_seed,
+		mglist = mglist,
+		selindex = selindex,
+		gamelist = pkgmgr.gamelist(),
+		gameidx = gameidx,
+		flags = label_flags..str_flags..label_spflags..str_spflags
+	})
 end
 
 local function create_world_buttonhandler(this, fields)

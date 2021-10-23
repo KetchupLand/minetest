@@ -249,3 +249,14 @@ function kl_formspec_styling()
 		"style_type[checkbox;textcolor=#000000]"..
 		"style_type[field;textcolor=#000000]"
 end
+
+-- Simple formspec wrapper that does variable substitution.
+function formspec_wrapper(formspec, variables)
+	local retval = formspec
+
+	for k,v in pairs(variables) do
+		retval = retval:gsub("${"..k.."}", v)
+	end
+
+	return retval
+end
