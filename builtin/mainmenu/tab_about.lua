@@ -110,48 +110,54 @@ return {
 	name = "about",
 	caption = fgettext("About"),
 	cbf_formspec = function(tabview, name, tabdata)
-		local logofile = defaulttexturedir .. "logo.png"
+		local logofile = core.formspec_escape(defaulttexturedir.."logo.png")
 		local version = core.get_version()
-		-- How do you get a convict to confess? Force them to mod Minetest formspecs for 10 minutes.
-		local fs = kl_formspec_styling()..
-			"image[0.75,0.5;2.2,2.2;" .. core.formspec_escape(logofile) .. "]" ..
-			"style[label_button;border=false]" ..
-			"button[0.5,2;2.5,2;label_button;" .. version.project .. " " .. version.string .. "]" ..
-			"button[0.75,2.75;2,2;homepage;minetest.net]" ..
-			"tablecolumns[color;text]" ..
-			"tableoptions[background=#00000000;highlight=#00000000;border=false]" ..
-			"table[3.5,-0.25;8.5,6.05;list_credits;" ..
-			"#FF0000,Credits:,,," ..
-			"#FFFF00," .. fgettext("KetchupLand Developers") .. ",," ..
-			buildCreditList(kl_devs) .. ",,," ..
-			",,#00FF00," .. toptext .. ",,," ..
-			"#FFFF00," .. fgettext("Minetest Core Developers") .. ",," ..
-			buildCreditList(core_developers) .. ",,," ..
-			"#FFFF00," .. fgettext("Minetest Active Contributors") .. ",," ..
-			buildCreditList(active_contributors) .. ",,," ..
-			"#FFFF00," .. fgettext("Minetest Previous Core Developers") ..",," ..
-			buildCreditList(previous_core_developers) .. ",,," ..
-			"#FFFF00," .. fgettext("Minetest Previous Contributors") .. ",," ..
-			buildCreditList(previous_contributors) .. "," ..
-			";1]"
-
-		-- Render information
-		fs = fs .. "label[0.75,4.9;" ..
-			fgettext("Active renderer:") .. "\n" ..
-			core.formspec_escape(core.get_screen_info().render_info) .. "]"
+		local openuserdatafolder
 
 		if PLATFORM ~= "Android" then
-			fs = fs .. "tooltip[userdata;" ..
-					fgettext("Opens the directory that contains user-provided worlds, games, mods,\n" ..
-							"and texture packs in a file manager / explorer.") .. "]"
-			fs = fs .. "button[0,4;3.5,1;userdata;" .. fgettext("Open User Data Directory") .. "]"
+			openuserdatafolder = [[
+				tooltip[userdata;Opens the directory that contains user-provided worlds, games, mods,\n
+					and texture packs in a file manager / explorer.]
+				button[0,4;3.5,1;userdata;Open User Data Folder]
+			]]
 		end
 
-		return fs
+		return formspec_wrapper([[
+			image[0.75,0.5;2.2,2.2;${logofile}]
+			style[label_button;border=false;textcolor=#000000]
+			button[0,2;3.5,2;label_button;${version_string}]
+			${common_styling}
+			tablecolumns[color;text]
+			tableoptions[background=#000000FF;highlight=#000000FF;border=false]
+			table[3.5,-0.25;8.45,5.95;list_credits;#FF0000,Credits:,
+			,,#FFFF00,KetchupLand Developers,
+			,${kl_devs},,,
+			,,#00FF00,${toptext},
+			,,#FFFF00,Minetest Core Developers,
+			,${core_developers},
+			,,#FFFF00,Minetest Active Contributors,
+			,${active_contributors},
+			,,#FFFF00,Minetest Previous Core Developers,
+			,${previous_core_developers},
+			,,#FFFF00,Minetest Previous Contributors,
+			,${previous_contributors},;1]
+			${openuserdatafolder}
+		]], {
+			logofile = logofile,
+			version_string = version.project.." "..version.string,
+			common_styling = kl_formspec_styling(),
+			kl_devs = buildCreditList(kl_devs),
+			toptext = toptext,
+			core_developers = buildCreditList(core_developers),
+			active_contributors = buildCreditList(active_contributors),
+			previous_core_developers = buildCreditList(previous_core_developers),
+			previous_contributors = buildCreditList(previous_contributors),
+			openuserdatafolder = openuserdatafolder
+		})
 	end,
 	cbf_button_handler = function(this, fields, name, tabdata)
-		if fields.homepage then
-			core.open_url("https://www.minetest.net")
+		if fields.label_button then
+			core.open_url("https://ketchupland.github.io")
 		end
 
 		if fields.userdata then
