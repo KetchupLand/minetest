@@ -36,12 +36,6 @@ rubenwardy, paramat:
   textures/base/pack/start_icon.png
   textures/base/pack/end_icon.png
 
-erlehmann:
-  misc/minetest-icon-24x24.png
-  misc/minetest-icon.ico
-  misc/minetest.svg
-  textures/base/pack/logo.png
-
 JRottm:
   textures/base/pack/player_marker.png
 

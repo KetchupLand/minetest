@@ -228,8 +228,6 @@ endif()
 
 if(UNIX AND NOT APPLE)
 	#install(FILES "doc/minetest.6" "doc/minetestserver.6" DESTINATION "${MANDIR}/man6")
-	#install(FILES "misc/net.minetest.minetest.appdata.xml" DESTINATION "${APPDATADIR}")
-	#install(FILES "misc/minetest.svg" DESTINATION "${ICONDIR}/hicolor/scalable/apps")
 
 	install(FILES "misc/ketchupland.desktop" DESTINATION "${XDG_APPS_DIR}")
 	install(FILES "misc/ketchupland.png" DESTINATION "${ICONDIR}/hicolor/128x128/apps")
