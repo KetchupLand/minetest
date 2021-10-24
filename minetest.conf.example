@@ -1036,11 +1036,11 @@
 
 #    Shadow offset (in pixels) of the default font. If 0, then shadow will not be drawn.
 #    type: int
-# font_shadow = 1
+# font_shadow = 0
 
 #    Opaqueness (alpha) of the shadow behind the default font, between 0 and 255.
 #    type: int min: 0 max: 255
-# font_shadow_alpha = 127
+# font_shadow_alpha = 0
 
 #    Font size of the default font in point (pt).
 #    type: int min: 1
@@ -1051,16 +1051,16 @@
 #    If “freetype” setting is disabled: Must be a bitmap or XML vectors font.
 #    The fallback font will be used if the font cannot be loaded.
 #    type: filepath
-# font_path = fonts/Arimo-Regular.ttf
+# font_path = fonts/Unifont.ttf
 
 #    type: filepath
-# font_path_bold = fonts/Arimo-Bold.ttf
+# font_path_bold = fonts/Unifont.ttf
 
 #    type: filepath
-# font_path_italic = fonts/Arimo-Italic.ttf
+# font_path_italic = fonts/Unifont.ttf
 
 #    type: filepath
-# font_path_bold_italic = fonts/Arimo-BoldItalic.ttf
+# font_path_bold_italic = fonts/Unifont.ttf
 
 #    Font size of the monospace font in point (pt).
 #    type: int min: 1
@@ -1071,23 +1071,23 @@
 #    If “freetype” setting is disabled: Must be a bitmap or XML vectors font.
 #    This font is used for e.g. the console and profiler screen.
 #    type: filepath
-# mono_font_path = fonts/Cousine-Regular.ttf
+# mono_font_path = fonts/Unifont.ttf
 
 #    type: filepath
-# mono_font_path_bold = fonts/Cousine-Bold.ttf
+# mono_font_path_bold = fonts/Unifont.ttf
 
 #    type: filepath
-# mono_font_path_italic = fonts/Cousine-Italic.ttf
+# mono_font_path_italic = fonts/Unifont.ttf
 
 #    type: filepath
-# mono_font_path_bold_italic = fonts/Cousine-BoldItalic.ttf
+# mono_font_path_bold_italic = fonts/Unifont.ttf
 
 #    Path of the fallback font.
 #    If “freetype” setting is enabled: Must be a TrueType font.
 #    If “freetype” setting is disabled: Must be a bitmap or XML vectors font.
 #    This font will be used for certain languages or if the default font is unavailable.
 #    type: filepath
-# fallback_font_path = fonts/DroidSansFallbackFull.ttf
+# fallback_font_path = fonts/Unifont.ttf
 
 #    Font size of the recent chat text and chat prompt in point (pt).
 #    Value 0 will use the default font size.

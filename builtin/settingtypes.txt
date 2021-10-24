@@ -885,10 +885,10 @@ font_bold (Font bold by default) bool false
 font_italic (Font italic by default) bool false
 
 #    Shadow offset (in pixels) of the default font. If 0, then shadow will not be drawn.
-font_shadow (Font shadow) int 1
+font_shadow (Font shadow) int 0
 
 #    Opaqueness (alpha) of the shadow behind the default font, between 0 and 255.
-font_shadow_alpha (Font shadow alpha) int 127 0 255
+font_shadow_alpha (Font shadow alpha) int 0 0 255
 
 #    Font size of the default font in point (pt).
 font_size (Font size) int 16 1
@@ -897,11 +897,11 @@ font_size (Font size) int 16 1
 #    If “freetype” setting is enabled: Must be a TrueType font.
 #    If “freetype” setting is disabled: Must be a bitmap or XML vectors font.
 #    The fallback font will be used if the font cannot be loaded.
-font_path (Regular font path) filepath fonts/Arimo-Regular.ttf
+font_path (Regular font path) filepath fonts/Unifont.ttf
 
-font_path_bold (Bold font path) filepath fonts/Arimo-Bold.ttf
-font_path_italic (Italic font path) filepath fonts/Arimo-Italic.ttf
-font_path_bold_italic (Bold and italic font path) filepath fonts/Arimo-BoldItalic.ttf
+font_path_bold (Bold font path) filepath fonts/Unifont.ttf
+font_path_italic (Italic font path) filepath fonts/Unifont.ttf
+font_path_bold_italic (Bold and italic font path) filepath fonts/Unifont.ttf
 
 #    Font size of the monospace font in point (pt).
 mono_font_size (Monospace font size) int 15 1
@@ -910,17 +910,17 @@ mono_font_size (Monospace font size) int 15 1
 #    If “freetype” setting is enabled: Must be a TrueType font.
 #    If “freetype” setting is disabled: Must be a bitmap or XML vectors font.
 #    This font is used for e.g. the console and profiler screen.
-mono_font_path (Monospace font path) filepath fonts/Cousine-Regular.ttf
+mono_font_path (Monospace font path) filepath fonts/Unifont.ttf
 
-mono_font_path_bold (Bold monospace font path) filepath fonts/Cousine-Bold.ttf
-mono_font_path_italic (Italic monospace font path) filepath fonts/Cousine-Italic.ttf
-mono_font_path_bold_italic (Bold and italic monospace font path) filepath fonts/Cousine-BoldItalic.ttf
+mono_font_path_bold (Bold monospace font path) filepath fonts/Unifont.ttf
+mono_font_path_italic (Italic monospace font path) filepath fonts/Unifont.ttf
+mono_font_path_bold_italic (Bold and italic monospace font path) filepath fonts/Unifont.ttf
 
 #    Path of the fallback font.
 #    If “freetype” setting is enabled: Must be a TrueType font.
 #    If “freetype” setting is disabled: Must be a bitmap or XML vectors font.
 #    This font will be used for certain languages or if the default font is unavailable.
-fallback_font_path (Fallback font path) filepath fonts/DroidSansFallbackFull.ttf
+fallback_font_path (Fallback font path) filepath fonts/Unifont.ttf
 
 #    Font size of the recent chat text and chat prompt in point (pt).
 #    Value 0 will use the default font size.

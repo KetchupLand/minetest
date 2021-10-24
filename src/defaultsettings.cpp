@@ -302,19 +302,19 @@ void set_default_settings()
 
 #if USE_FREETYPE
 	settings->setDefault("freetype", "true");
-	settings->setDefault("font_path", porting::getDataPath("fonts" DIR_DELIM "Arimo-Regular.ttf"));
-	settings->setDefault("font_path_italic", porting::getDataPath("fonts" DIR_DELIM "Arimo-Italic.ttf"));
-	settings->setDefault("font_path_bold", porting::getDataPath("fonts" DIR_DELIM "Arimo-Bold.ttf"));
-	settings->setDefault("font_path_bold_italic", porting::getDataPath("fonts" DIR_DELIM "Arimo-BoldItalic.ttf"));
+	settings->setDefault("font_path", porting::getDataPath("fonts" DIR_DELIM "Unifont.ttf"));
+	settings->setDefault("font_path_italic", porting::getDataPath("fonts" DIR_DELIM "Unifont.ttf"));
+	settings->setDefault("font_path_bold", porting::getDataPath("fonts" DIR_DELIM "Unifont.ttf"));
+	settings->setDefault("font_path_bold_italic", porting::getDataPath("fonts" DIR_DELIM "Unifont.ttf"));
 	settings->setDefault("font_bold", "false");
 	settings->setDefault("font_italic", "false");
-	settings->setDefault("font_shadow", "1");
-	settings->setDefault("font_shadow_alpha", "127");
-	settings->setDefault("mono_font_path", porting::getDataPath("fonts" DIR_DELIM "Cousine-Regular.ttf"));
-	settings->setDefault("mono_font_path_italic", porting::getDataPath("fonts" DIR_DELIM "Cousine-Italic.ttf"));
-	settings->setDefault("mono_font_path_bold", porting::getDataPath("fonts" DIR_DELIM "Cousine-Bold.ttf"));
-	settings->setDefault("mono_font_path_bold_italic", porting::getDataPath("fonts" DIR_DELIM "Cousine-BoldItalic.ttf"));
-	settings->setDefault("fallback_font_path", porting::getDataPath("fonts" DIR_DELIM "DroidSansFallbackFull.ttf"));
+	settings->setDefault("font_shadow", "0");
+	settings->setDefault("font_shadow_alpha", "0");
+	settings->setDefault("mono_font_path", porting::getDataPath("fonts" DIR_DELIM "Unifont.ttf"));
+	settings->setDefault("mono_font_path_italic", porting::getDataPath("fonts" DIR_DELIM "Unifont.ttf"));
+	settings->setDefault("mono_font_path_bold", porting::getDataPath("fonts" DIR_DELIM "Unifont.ttf"));
+	settings->setDefault("mono_font_path_bold_italic", porting::getDataPath("fonts" DIR_DELIM "Unifont.ttf"));
+	settings->setDefault("fallback_font_path", porting::getDataPath("fonts" DIR_DELIM "Unifont.ttf"));
 
 	std::string font_size_str = std::to_string(TTF_DEFAULT_FONT_SIZE);
 #else
