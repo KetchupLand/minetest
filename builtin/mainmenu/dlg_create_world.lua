@@ -104,9 +104,6 @@ local function create_world_formspec(dialogdata)
 		end
 	end
 
-	local game_by_gameidx = core.get_game(gameidx)
-	local disallowed_mapgen_settings = {}
-
 	local mglist = ""
 	local selindex
 	local i = 1
@@ -129,9 +126,6 @@ local function create_world_formspec(dialogdata)
 
 	local mg_main_flags = function(mapgen, y)
 		if mapgen == "singlenode" then
-			return "", y
-		end
-		if disallowed_mapgen_settings["mg_flags"] then
 			return "", y
 		end
 
@@ -164,9 +158,7 @@ local function create_world_formspec(dialogdata)
 		if not flag_checkboxes[mapgen] then
 			return "", y
 		end
-		if disallowed_mapgen_settings["mg"..mapgen.."_spflags"] then
-			return "", y
-		end
+
 		local form = ""
 		for _,tab in pairs(flag_checkboxes[mapgen]) do
 			local id = "flag_mg"..mapgen.."_"..tab[1]
@@ -206,17 +198,6 @@ local function create_world_formspec(dialogdata)
 	if str_flags == '' then
 		str_flags = "label[1.3,2;... dust ...]"
 	end
-
-	--[[
-		:gsub("${common_styling}", kl_formspec_styling())
-		:gsub("${worldname}", core.formspec_escape(worldname))
-		:gsub("${current_seed}", current_seed)
-		:gsub("${mglist}", mglist)
-		:gsub("${selindex}", selindex)
-		:gsub("${gamelist}", pkgmgr.gamelist())
-		:gsub("${gameidx}", gameidx)
-		:gsub("${flags}", label_flags..str_flags..label_spflags..str_spflags)
-	]]
 
 	return formspec_wrapper([[
 		formspec_version[4]
