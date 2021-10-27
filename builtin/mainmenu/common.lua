@@ -246,8 +246,7 @@ function kl_formspec_styling()
 	return	"background9[0,0;0,0;"..basedir.."kl_background.png;true;5]"..
 		"style_type[button;border=false;bgimg="..basedir.."kl_background.png;bgimg_pressed="..basedir.."kl_btn_bg_pressed.png;bgimg_middle=5,5;textcolor=#000000]"..
 		"style_type[label;textcolor=#000000]"..
-		"style_type[checkbox;textcolor=#000000]"..
-		"style_type[field;textcolor=#000000]"
+		"style_type[checkbox;textcolor=#000000]"
 end
 
 -- Simple formspec wrapper that does variable substitution.
