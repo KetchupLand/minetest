@@ -115,81 +115,19 @@ else
 	end
 end
 
-local function get_disabled_settings(game)
-	if not game then
-		return {}
-	end
-
-	local gameconfig = Settings(game.path .. "/game.conf")
-	local disabled_settings = {}
-	if gameconfig then
-		local disabled_settings_str = (gameconfig:get("disabled_settings") or ""):split()
-		for _, value in pairs(disabled_settings_str) do
-			local state = false
-			value = value:trim()
-			if string.sub(value, 1, 1) == "!" then
-				state = true
-				value = string.sub(value, 2)
-			end
-			if valid_disabled_settings[value] then
-				disabled_settings[value] = state
-			else
-				core.log("error", "Invalid disabled setting in game.conf: "..tostring(value))
-			end
-		end
-	end
-	return disabled_settings
-end
-
 local function get_formspec(tabview, name, tabdata)
-	local retval = kl_formspec_styling().."box[-0.1,-0.1;3.8,5.7;#1f1f1f]"
-
 	local index = filterlist.get_current_index(menudata.worldlist,
 				tonumber(core.settings:get("mainmenu_last_selected_world")))
 	local list = menudata.worldlist:get_list()
 	local world = list and index and list[index]
 	local gameid = world and world.gameid
 	local game = gameid and pkgmgr.find_by_gameid(gameid)
-	local disabled_settings = get_disabled_settings(game)
 
-	local creative, damage, host = "", "", ""
+	local host = ''
 
-	-- Y offsets for game settings checkboxes
-	local y = -0.2
-	local yo = 0.45
-
-	if disabled_settings["creative_mode"] == nil then
-		creative = "checkbox[0,"..y..";cb_creative_mode;".. fgettext("Creative Mode") .. ";" ..
-			dump(core.settings:get_bool("creative_mode")) .. "]"
-		y = y + yo
-	end
-	if disabled_settings["enable_damage"] == nil then
-		damage = "checkbox[0,"..y..";cb_enable_damage;".. fgettext("Enable Damage") .. ";" ..
-			dump(core.settings:get_bool("enable_damage")) .. "]"
-		y = y + yo
-	end
-	if disabled_settings["enable_server"] == nil then
-		host = "checkbox[0,"..y..";cb_server;".. fgettext("Host Server") ..";" ..
-			dump(core.settings:get_bool("enable_server")) .. "]"
-		y = y + yo
-	end
-
-	retval = retval ..
-			"button[3.9,3.8;2.8,1;world_delete;".. fgettext("Delete") .. "]" ..
-			"button[6.55,3.8;2.8,1;world_configure;".. fgettext("Select Mods") .. "]" ..
-			"button[9.2,3.8;2.8,1;world_create;".. fgettext("New") .. "]" ..
-			"label[3.9,-0.05;".. fgettext("Select World:") .. "]"..
-			creative ..
-			damage ..
-			host ..
-			"textlist[3.9,0.4;7.9,3.45;sp_worlds;" ..
-			menu_render_worldlist() ..
-			";" .. index .. "]"
-
-	if core.settings:get_bool("enable_server") and disabled_settings["enable_server"] == nil then
-		retval = retval ..
-				"button[7.9,4.75;4.1,1;play;".. fgettext("Host Game") .. "]" ..
-				"checkbox[0,"..y..";cb_server_announce;" .. fgettext("Announce Server") .. ";" ..
+	if core.settings:get_bool("enable_server") then
+		host = 	"button[7.9,4.75;4.1,1;play;".. fgettext("Host Game") .. "]" ..
+				"checkbox[0,1.2;cb_server_announce;" .. fgettext("Announce Server") .. ";" ..
 				dump(core.settings:get_bool("server_announce")) .. "]" ..
 				"field[0.3,2.85;3.8,0.5;te_playername;" .. fgettext("Name") .. ";" ..
 				core.formspec_escape(core.settings:get("name")) .. "]" ..
@@ -197,22 +135,43 @@ local function get_formspec(tabview, name, tabdata)
 
 		local bind_addr = core.settings:get("bind_address")
 		if bind_addr ~= nil and bind_addr ~= "" then
-			retval = retval ..
+			host = host ..
 				"field[0.3,5.25;2.5,0.5;te_serveraddr;" .. fgettext("Bind Address") .. ";" ..
 				core.formspec_escape(core.settings:get("bind_address")) .. "]" ..
 				"field[2.85,5.25;1.25,0.5;te_serverport;" .. fgettext("Port") .. ";" ..
 				core.formspec_escape(core.settings:get("port")) .. "]"
 		else
-			retval = retval ..
+			host = host ..
 				"field[0.3,5.25;3.8,0.5;te_serverport;" .. fgettext("Server Port") .. ";" ..
 				core.formspec_escape(core.settings:get("port")) .. "]"
 		end
 	else
-		retval = retval ..
-				"button[7.9,4.75;4.1,1;play;" .. fgettext("Play Game") .. "]"
+		host = host ..
+				"button[3.9,4.75;8.1,1;play;" .. fgettext("Play Game") .. "]"
 	end
 
-	return retval
+	return formspec_wrapper([[
+		size[12,5.4]
+		${common_styles}
+		box[-0.1,-0.1;3.8,5.7;#1f1f1f]
+		button[3.9,3.8;2.8,1;world_delete;Delete]
+		button[6.55,3.8;2.8,1;world_configure;Select Mods]
+		button[9.2,3.8;2.8,1;world_create;New]
+		label[3.9,-0.05;Select World:]
+		checkbox[0,-0.2;cb_creative_mode;Creative Mode;${setting_creative}]
+		checkbox[0,0.25;cb_enable_damage;Enable Damage;${setting_damage}]
+		checkbox[0,0.7;cb_server;Host Server;${setting_host}]
+		textlist[3.9,0.4;7.9,3.45;sp_worlds;${worldlist};${worldindex}]
+		${host}
+	]], {
+		common_styles = kl_formspec_styling(),
+		setting_creative = dump(core.settings:get_bool("creative_mode")),
+		setting_damage = dump(core.settings:get_bool("enable_damage")),
+		setting_host = dump(core.settings:get_bool("enable_server")),
+		worldlist = menu_render_worldlist(),
+		worldindex = index,
+		host = host
+	})
 end
 
 local function main_button_handler(this, fields, name, tabdata)
@@ -288,17 +247,6 @@ local function main_button_handler(this, fields, name, tabdata)
 		if world then
 			game_obj = pkgmgr.find_by_gameid(world.gameid)
 			core.settings:set("menu_last_game", game_obj.id)
-		end
-
-		local disabled_settings = get_disabled_settings(game_obj)
-		for k, _ in pairs(valid_disabled_settings) do
-			local v = disabled_settings[k]
-			if v ~= nil then
-				if k == "enable_server" and v == true then
-					error("Setting 'enable_server' cannot be force-enabled! The game.conf needs to be fixed.")
-				end
-				core.settings:set_bool(k, disabled_settings[k])
-			end
 		end
 
 		if core.settings:get_bool("enable_server") then
