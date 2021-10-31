@@ -18,11 +18,6 @@
 
 local enable_gamebar = PLATFORM ~= "Android"
 local current_game, singleplayer_refresh_gamebar
-local valid_disabled_settings = {
-	["enable_damage"]=true,
-	["creative_mode"]=true,
-	["enable_server"]=true,
-}
 
 if enable_gamebar then
 	-- Currently chosen game in gamebar for theming and filtering
@@ -121,7 +116,6 @@ local function get_formspec(tabview, name, tabdata)
 	local list = menudata.worldlist:get_list()
 	local world = list and index and list[index]
 	local gameid = world and world.gameid
-	local game = gameid and pkgmgr.find_by_gameid(gameid)
 
 	local host = ''
 
