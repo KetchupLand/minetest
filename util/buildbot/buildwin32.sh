@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
 
-CORE_GIT=https://github.com/minetest/minetest
+CORE_GIT=https://github.com/KetchupLand/minetest
 CORE_BRANCH=master
-CORE_NAME=minetest
-GAME_GIT=https://github.com/minetest/minetest_game
-GAME_BRANCH=master
-GAME_NAME=minetest_game
+CORE_NAME=ketchupland
+GAME_GIT=https://github.com/KetchupLand/KetchupLand
+GAME_BRANCH=main
+GAME_NAME=ketchupland
 
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [ $# -ne 1 ]; then
@@ -91,11 +91,9 @@ if [ -n "$EXISTING_MINETEST_DIR" ]; then
 else
 	sourcedir=$PWD/$CORE_NAME
 	[ -d $CORE_NAME ] && { pushd $CORE_NAME; git pull; popd; } || \
-		git clone -b $CORE_BRANCH $CORE_GIT $CORE_NAME
-	if [ -z "$NO_MINETEST_GAME" ]; then
-		[ -d games/$GAME_NAME ] && { pushd games/$GAME_NAME; git pull; popd; } || \
-			git clone -b $GAME_BRANCH $GAME_GIT games/$GAME_NAME
-	fi
+		git clone --depth 1 -b $CORE_BRANCH $CORE_GIT $CORE_NAME
+	[ -d games/$GAME_NAME ] && { pushd games/$GAME_NAME; git pull; popd; } || \
+		git clone --depth 1 -b $GAME_BRANCH $GAME_GIT $CORE_NAME/games/$GAME_NAME
 fi
 
 git_hash=$(cd $sourcedir && git rev-parse --short HEAD)
@@ -110,12 +108,11 @@ irr_dlls=$(echo $libdir/irrlicht/lib/*.dll | tr ' ' ';')
 vorbis_dlls=$(echo $libdir/libvorbis/bin/libvorbis{,file}-*.dll | tr ' ' ';')
 gettext_dlls=$(echo $libdir/gettext/bin/lib{intl,iconv}-*.dll | tr ' ' ';')
 
-cmake -S $sourcedir -B . \
+cmake -S $sourcedir -B . -G Ninja \
 	-DCMAKE_TOOLCHAIN_FILE=$toolchain_file \
 	-DCMAKE_INSTALL_PREFIX=/tmp \
-	-DVERSION_EXTRA=$git_hash \
 	-DBUILD_CLIENT=1 -DBUILD_SERVER=0 \
-	-DEXTRA_DLL="$runtime_dll" \
+	-DEXTRA_DLL="$runtime_dlls" \
 	\
 	-DENABLE_SOUND=1 \
 	-DENABLE_CURL=1 \
@@ -172,9 +169,9 @@ cmake -S $sourcedir -B . \
 	-DLEVELDB_LIBRARY=$libdir/leveldb/lib/libleveldb.dll.a \
 	-DLEVELDB_DLL=$libdir/leveldb/bin/libleveldb.dll
 
-make -j$(nproc)
+ninja
 
-[ -z "$NO_PACKAGE" ] && make package
+[ -z "$NO_PACKAGE" ] && ninja package
 
 exit 0
 # EOF

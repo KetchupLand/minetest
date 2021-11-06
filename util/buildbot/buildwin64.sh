@@ -31,7 +31,7 @@ fi
 toolchain_file=$dir/toolchain_${compiler%-gcc}.cmake
 echo "Using $toolchain_file"
 
-tmp=$(dirname "$(command -v $compiler)")/../x86_64-w64-mingw32/bin
+tmp=/usr/x86_64-w64-mingw32/bin
 runtime_dlls=
 [ -d "$tmp" ] && runtime_dlls=$(echo $tmp/lib{gcc_,stdc++-,winpthread-}*.dll | tr ' ' ';')
 [ -z "$runtime_dlls" ] &&
@@ -112,7 +112,7 @@ cmake -S $sourcedir -B . -G Ninja \
 	-DCMAKE_TOOLCHAIN_FILE=$toolchain_file \
 	-DCMAKE_INSTALL_PREFIX=/tmp \
 	-DBUILD_CLIENT=1 -DBUILD_SERVER=0 \
-	-DEXTRA_DLL="$runtime_dll" \
+	-DEXTRA_DLL="$runtime_dlls" \
 	\
 	-DENABLE_SOUND=1 \
 	-DENABLE_CURL=1 \
