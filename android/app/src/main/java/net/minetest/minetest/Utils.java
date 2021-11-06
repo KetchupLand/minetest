@@ -1,4 +1,4 @@
-package net.minetest.minetest;
+package net.minetest.ketchupland;
 
 import android.content.Context;
 
@@ -21,7 +21,7 @@ public class Utils {
 			return null;
 		}
 
-		return createDirs(extDir, "Minetest");
+		return createDirs(extDir, "KetchupLand");
 	}
 
 	public static @Nullable File getCacheDirectory(Context context) {

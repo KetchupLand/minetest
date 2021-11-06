@@ -18,7 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-package net.minetest.minetest;
+package net.minetest.ketchupland;
 
 import android.app.NativeActivity;
 import android.content.Intent;
@@ -41,7 +41,7 @@ import java.util.Objects;
 public class GameActivity extends NativeActivity {
 	static {
 		System.loadLibrary("c++_shared");
-		System.loadLibrary("Minetest");
+		System.loadLibrary("KetchupLand");
 	}
 
 	private int messageReturnCode = -1;

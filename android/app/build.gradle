@@ -4,7 +4,7 @@ android {
 	buildToolsVersion '30.0.3'
 	ndkVersion "$ndk_version"
 	defaultConfig {
-		applicationId 'net.minetest.minetest'
+		applicationId 'net.minetest.ketchupland'
 		minSdkVersion 16
 		targetSdkVersion 29
 		versionName "${versionMajor}.${versionMinor}.${versionPatch}"
@@ -53,7 +53,7 @@ android {
 task prepareAssets() {
 	def assetsFolder = "build/assets"
 	def projRoot = "../.."
-	def gameToCopy = "minetest_game"
+	def gameToCopy = "ketchupland"
 
 	copy {
 		from "${projRoot}/minetest.conf.example", "${projRoot}/README.md" into assetsFolder
@@ -76,13 +76,13 @@ task prepareAssets() {
 	copy {
 		from "${projRoot}/games/${gameToCopy}" into "${assetsFolder}/games/${gameToCopy}"
 	}
-	fileTree("${projRoot}/po").include("**/*.po").forEach { poFile ->
-		def moPath = "${assetsFolder}/locale/${poFile.parentFile.name}/LC_MESSAGES/"
-		file(moPath).mkdirs()
-		exec {
-			commandLine 'msgfmt', '-o', "${moPath}/minetest.mo", poFile
-		}
-	}
+	//fileTree("${projRoot}/po").include("**/*.po").forEach { poFile ->
+	//	def moPath = "${assetsFolder}/locale/${poFile.parentFile.name}/LC_MESSAGES/"
+	//	file(moPath).mkdirs()
+	//	exec {
+	//		commandLine 'msgfmt', '-o', "${moPath}/minetest.mo", poFile
+	//	}
+	//}
 	copy {
 		from "${projRoot}/textures" into "${assetsFolder}/textures"
 	}
@@ -90,7 +90,7 @@ task prepareAssets() {
 	file("${assetsFolder}/.nomedia").text = "";
 
 	task zipAssets(type: Zip) {
-		archiveName "Minetest.zip"
+		archiveName "Assets.zip"
 		from "${assetsFolder}"
 		destinationDir file("src/main/assets")
 	}

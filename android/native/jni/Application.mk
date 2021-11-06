@@ -3,7 +3,7 @@ APP_ABI := ${TARGET_ABI}
 APP_STL := c++_shared
 NDK_TOOLCHAIN_VERSION := clang
 APP_SHORT_COMMANDS := true
-APP_MODULES := Minetest
+APP_MODULES := KetchupLand
 
 APP_CPPFLAGS := -O2 -fvisibility=hidden
 

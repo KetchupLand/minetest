@@ -114,7 +114,7 @@ void initAndroid()
 		exit(-1);
 	}
 
-	nativeActivity = findClass("net/minetest/minetest/GameActivity");
+	nativeActivity = findClass("net/minetest/ketchupland/GameActivity");
 	if (nativeActivity == nullptr)
 		errorstream <<
 			"porting::initAndroid unable to find java native activity class" <<
@@ -124,7 +124,7 @@ void initAndroid()
 	// in the start-up code
 	__android_log_print(ANDROID_LOG_ERROR, PROJECT_NAME_C,
 			"Initializing GPROF profiler");
-	monstartup("libMinetest.so");
+	monstartup("libKetchupLand.so");
 #endif
 }
 

@@ -16,7 +16,8 @@
 --51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-local enable_gamebar = PLATFORM ~= "Android"
+--local enable_gamebar = PLATFORM ~= "Android"
+local enable_gamebar = true
 local current_game, singleplayer_refresh_gamebar
 
 if enable_gamebar then
@@ -115,7 +116,6 @@ local function get_formspec(tabview, name, tabdata)
 				tonumber(core.settings:get("mainmenu_last_selected_world")))
 	local list = menudata.worldlist:get_list()
 	local world = list and index and list[index]
-	local gameid = world and world.gameid
 
 	local host = ''
 

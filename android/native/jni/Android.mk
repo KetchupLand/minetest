@@ -52,10 +52,10 @@ LOCAL_MODULE := OpenAL
 LOCAL_SRC_FILES := deps/$(APP_ABI)/OpenAL-Soft/libopenal.a
 include $(PREBUILT_STATIC_LIBRARY)
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := Gettext
-LOCAL_SRC_FILES := deps/$(APP_ABI)/Gettext/libintl.a
-include $(PREBUILT_STATIC_LIBRARY)
+#include $(CLEAR_VARS)
+#LOCAL_MODULE := Gettext
+#LOCAL_SRC_FILES := deps/$(APP_ABI)/Gettext/libintl.a
+#include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := SQLite3
@@ -83,7 +83,7 @@ LOCAL_SRC_FILES := deps/$(APP_ABI)/Zstd/libzstd.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := Minetest
+LOCAL_MODULE := KetchupLand
 
 LOCAL_CFLAGS += \
 	-DJSONCPP_NO_LOCALE_SUPPORT     \
@@ -94,12 +94,14 @@ LOCAL_CFLAGS += \
 	-DUSE_FREETYPE=1                \
 	-DUSE_LEVELDB=0                 \
 	-DUSE_LUAJIT=1                  \
-	-DUSE_GETTEXT=1                 \
+	-DUSE_GETTEXT=0					\
 	-DVERSION_MAJOR=${versionMajor} \
 	-DVERSION_MINOR=${versionMinor} \
 	-DVERSION_PATCH=${versionPatch} \
 	-DVERSION_EXTRA=${versionExtra} \
 	$(GPROF_DEF)
+
+#	-DUSE_GETTEXT=1
 
 ifdef NDEBUG
 	LOCAL_CFLAGS += -DNDEBUG=1
@@ -119,13 +121,14 @@ LOCAL_C_INCLUDES := \
 	deps/$(APP_ABI)/Curl/include                       \
 	deps/$(APP_ABI)/Freetype/include/freetype2         \
 	deps/$(APP_ABI)/Irrlicht/include                   \
-	deps/$(APP_ABI)/Gettext/include                    \
 	deps/$(APP_ABI)/Iconv/include                      \
 	deps/$(APP_ABI)/LuaJIT/include                     \
 	deps/$(APP_ABI)/OpenAL-Soft/include                \
 	deps/$(APP_ABI)/SQLite/include                     \
 	deps/$(APP_ABI)/Vorbis/include                     \
 	deps/$(APP_ABI)/Zstd/include
+
+#	deps/$(APP_ABI)/Gettext/include
 
 LOCAL_SRC_FILES := \
 	$(wildcard ../../src/client/*.cpp)           \
@@ -221,10 +224,12 @@ LOCAL_STATIC_LIBRARIES += \
 	Irrlicht \
 	LuaJIT \
 	OpenAL \
-	Gettext \
 	SQLite3 \
 	Vorbis libvorbisfile libogg \
 	Zstd
+
+#	Gettext
+
 LOCAL_STATIC_LIBRARIES += android_native_app_glue $(PROFILER_LIBS)
 
 LOCAL_LDLIBS := -lEGL -lGLESv1_CM -lGLESv2 -landroid -lOpenSLES

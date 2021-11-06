@@ -18,7 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-package net.minetest.minetest;
+package net.minetest.ketchupland;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -45,10 +45,10 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 public class UnzipService extends IntentService {
-	public static final String ACTION_UPDATE = "net.minetest.minetest.UPDATE";
-	public static final String ACTION_PROGRESS = "net.minetest.minetest.PROGRESS";
-	public static final String ACTION_PROGRESS_MESSAGE = "net.minetest.minetest.PROGRESS_MESSAGE";
-	public static final String ACTION_FAILURE = "net.minetest.minetest.FAILURE";
+	public static final String ACTION_UPDATE = "net.minetest.ketchupland.UPDATE";
+	public static final String ACTION_PROGRESS = "net.minetest.ketchupland.PROGRESS";
+	public static final String ACTION_PROGRESS_MESSAGE = "net.minetest.ketchupland.PROGRESS_MESSAGE";
+	public static final String ACTION_FAILURE = "net.minetest.ketchupland.FAILURE";
 	public static final int SUCCESS = -1;
 	public static final int FAILURE = -2;
 	public static final int INDETERMINATE = -3;
@@ -66,13 +66,13 @@ public class UnzipService extends IntentService {
 	}
 
 	public UnzipService() {
-		super("net.minetest.minetest.UnzipService");
+		super("net.minetest.ketchupland.UnzipService");
 	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		Notification.Builder notificationBuilder = createNotification();
-		final File zipFile = new File(getCacheDir(), "Minetest.zip");
+		final File zipFile = new File(getCacheDir(), "Assets.zip");
 		try {
 			setIsRunning(true);
 			File userDataDirectory = Utils.getUserDataDirectory(this);
@@ -102,7 +102,7 @@ public class UnzipService extends IntentService {
 	}
 
 	private Notification.Builder createNotification() {
-		String name = "net.minetest.minetest";
+		String name = "net.minetest.ketchupland";
 		String channelId = "Minetest channel";
 		String description = "notifications from Minetest";
 		Notification.Builder builder;
@@ -200,7 +200,7 @@ public class UnzipService extends IntentService {
 	 * Migrates user data from deprecated external storage to app scoped storage
 	 */
 	private void migrate(Notification.Builder notificationBuilder, File newLocation) throws IOException {
-		File oldLocation = new File(Environment.getExternalStorageDirectory(), "Minetest");
+		File oldLocation = new File(Environment.getExternalStorageDirectory(), "KetchupLand");
 		if (!oldLocation.isDirectory())
 			return;
 
