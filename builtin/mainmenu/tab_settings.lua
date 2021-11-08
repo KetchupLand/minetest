@@ -94,60 +94,22 @@ local function antialiasing_fname_to_name(fname)
 end
 
 local function formspec(tabview, name, tabdata)
-	local tab_string =
-		kl_formspec_styling()..
-		"style_type[label;textcolor=#FFFFFF]"..
-		"box[0,0;3.75,4.5;#1f1f1f]" ..
-		"checkbox[0.25,0;cb_smooth_lighting;" .. fgettext("Smooth Lighting") .. ";"
-				.. dump(core.settings:get_bool("smooth_lighting")) .. "]" ..
-		"checkbox[0.25,0.5;cb_particles;" .. fgettext("Particles") .. ";"
-				.. dump(core.settings:get_bool("enable_particles")) .. "]" ..
-		"checkbox[0.25,1.5;cb_opaque_water;" .. fgettext("Opaque Water") .. ";"
-				.. dump(core.settings:get_bool("opaque_water")) .. "]" ..
-		"checkbox[0.25,2.0;cb_connected_glass;" .. fgettext("Connected Glass") .. ";"
-				.. dump(core.settings:get_bool("connected_glass")) .. "]" ..
-		"box[4,0;3.75,4.5;#1f1f1f]" ..
-		"label[4.25,0.1;" .. fgettext("Mipmapping:") .. "]" ..
-		"dropdown[4.25,0.55;3.5;dd_mipmap;" .. dd_options.mipmap[1] .. ";"
-				.. getSettingIndex.Mipmap() .. "]" ..
-		"label[4.25,1.45;" .. fgettext("Antialiasing:") .. "]" ..
-		"dropdown[4.25,1.9;3.5;dd_antialiasing;" .. dd_options.antialiasing[1] .. ";"
-				.. getSettingIndex.Antialiasing() .. "]" ..
-		"label[4.25,3.4;(NYI, Always on)]"..
-		"checkbox[4.25,3.6;cb_discord_rpc;" .. fgettext("Discord Rich Presence") .. ";"
-				.. dump(core.settings:get_bool("discord_rpc")) .. "]" ..
-		"box[8,0;3.75,4.5;#1f1f1f]"
-
 	local video_driver = core.settings:get("video_driver")
 	local shaders_enabled = core.settings:get_bool("enable_shaders")
-	if video_driver == "opengl" then
-		tab_string = tab_string ..
-			"checkbox[8.25,0;cb_shaders;" .. fgettext("Shaders") .. ";"
-					.. tostring(shaders_enabled) .. "]"
-	elseif video_driver == "ogles2" then
-		tab_string = tab_string ..
-			"checkbox[8.25,0;cb_shaders;" .. fgettext("Shaders (experimental)") .. ";"
-					.. tostring(shaders_enabled) .. "]"
+	local shaderz,touchval
+	if video_driver == "opengl" or video_driver == "ogles2" then
+		shaderz =
+			"checkbox[8.25,0;cb_shaders;Shaders;"..tostring(shaders_enabled).."]"
 	else
 		core.settings:set_bool("enable_shaders", false)
 		shaders_enabled = false
-		tab_string = tab_string ..
+		shaderz =
 			"label[8.38,0.2;" .. core.colorize("#888888",
 					fgettext("Shaders (unavailable)")) .. "]"
 	end
 
-	tab_string = tab_string ..
-		"style_type[label;textcolor=#000000]"
-		.."button[8,4.75;3.95,1;btn_change_keys;"
-		.. fgettext("Change Keys") .. "]"
-
-	tab_string = tab_string ..
-		"button[0,4.75;3.95,1;btn_advanced_settings;"
-		.. fgettext("All Settings") .. "]"
-
-
 	if core.settings:get("touchscreen_threshold") ~= nil then
-		tab_string = tab_string ..
+		touchval =
 			"label[4.3,4.2;" .. fgettext("Touchthreshold: (px)") .. "]" ..
 			"dropdown[4.25,4.65;3.5;dd_touchthreshold;0,10,20,30,40,50;" ..
 			((tonumber(core.settings:get("touchscreen_threshold")) / 10) + 1) ..
@@ -155,7 +117,7 @@ local function formspec(tabview, name, tabdata)
 	end
 
 	if shaders_enabled then
-		tab_string = tab_string ..
+		shaderz = shaderz ..
 			"checkbox[8.25,0.5;cb_tonemapping;" .. fgettext("Tone Mapping") .. ";"
 					.. dump(core.settings:get_bool("tone_mapping")) .. "]" ..
 			"checkbox[8.25,1;cb_waving_water;" .. fgettext("Waving Liquids") .. ";"
@@ -167,21 +129,47 @@ local function formspec(tabview, name, tabdata)
 			"label[8.25,3.0;" .. fgettext("Dynamic shadows: ") .. "]" ..
 			"dropdown[8.25,3.5;3.5;dd_shadows;" .. dd_options.shadow_levels[1] .. ";"
 					.. getSettingIndex.ShadowMapping() .. "]"
-	else
-		tab_string = tab_string ..
-			"label[8.38,0.7;" .. core.colorize("#888888",
-					fgettext("Tone Mapping")) .. "]" ..
-			"label[8.38,1.2;" .. core.colorize("#888888",
-					fgettext("Waving Liquids")) .. "]" ..
-			"label[8.38,1.7;" .. core.colorize("#888888",
-					fgettext("Waving Leaves")) .. "]" ..
-			"label[8.38,2.2;" .. core.colorize("#888888",
-					fgettext("Waving Plants")) .. "]"..
-			"label[8.38,2.7;" .. core.colorize("#888888",
-					fgettext("Dynamic shadows")) .. "]"
 	end
 
-	return tab_string
+	return formspec_wrapper([[
+		${common_styles}
+		style_type[label;textcolor=#FFFFFF]
+
+		box[0,0;3.75,4.5;#1f1f1f]
+		checkbox[0.25,0;cb_smooth_lighting;Smooth Lighting;${cfg_smooth_lighting}]
+		checkbox[0.25,0.5;cb_particles;Particles;${cfg_particles}]
+		checkbox[0.25,1.0;cb_opaque_water;Opaque Water;${cfg_opaque_water}]
+		checkbox[0.25,1.5;cb_connected_glass;Connected Glass;${cfg_connected_glass}]
+		box[4,0;3.75,4.5;#1f1f1f]
+
+		label[4.25,0.1;Mipmapping:]
+		dropdown[4.25,0.55;3.5;dd_mipmap;${mipmaps};${mipmapidx}]
+		label[4.25,1.45;Antialiasing:]
+		dropdown[4.25,1.9;3.5;dd_antialiasing;${aas};${aaidx}]
+
+		box[8,0;3.75,4.5;#1f1f1f]
+		${shaderz}
+
+		style_type[label;textcolor=#000000]
+		button[8,4.75;3.95,1;btn_change_keys;Change Keys]
+		button[0,4.75;3.95,1;btn_advanced_settings;All Settings]
+
+		${touchval}
+	]], {
+		common_styles = kl_formspec_styling(),
+		cfg_smooth_lighting = dump(core.settings:get_bool("smooth_lighting")),
+		cfg_particles = dump(core.settings:get_bool("particles")),
+		cfg_opaque_water = dump(core.settings:get_bool("opaque_water")),
+		cfg_connected_glass = dump(core.settings:get_bool("connected_glass")),
+		mipmaps = dd_options.mipmap[1],
+		mipmapidx = getSettingIndex.Mipmap(),
+		aas = dd_options.antialiasing[1],
+		aaidx = getSettingIndex.Antialiasing(),
+		cfg_rpc = dump(core.settings:get_bool("discord_rpc")),
+		shaderz = shaderz,
+		touchval = touchval,
+	})
+	-- 		checkbox[4.15,3.6;cb_discord_rpc;Discord Rich Presence;${cfg_rpc}]
 end
 
 --------------------------------------------------------------------------------
