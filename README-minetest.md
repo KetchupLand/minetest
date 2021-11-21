@@ -182,28 +182,6 @@ Download IrrlichtMt to `lib/irrlichtmt`, it will be used to satisfy the Irrlicht
 
     git clone --depth 1 https://github.com/minetest/irrlicht.git lib/irrlichtmt
 
-Download source, without using Git:
-
-    wget https://github.com/minetest/minetest/archive/master.tar.gz
-    tar xf master.tar.gz
-    cd minetest-master
-
-Download minetest_game, without using Git:
-
-    cd games/
-    wget https://github.com/minetest/minetest_game/archive/master.tar.gz
-    tar xf master.tar.gz
-    mv minetest_game-master minetest_game
-    cd ..
-
-Download IrrlichtMt, without using Git:
-
-    cd lib/
-    wget https://github.com/minetest/irrlicht/archive/master.tar.gz
-    tar xf master.tar.gz
-    mv irrlicht-master irrlichtmt
-    cd ..
-
 #### Build
 
 Build a version that runs directly from the source directory:
