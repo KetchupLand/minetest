@@ -135,7 +135,8 @@ Compiling
 | GCC        | 4.9+    | Can be replaced with Clang 3.4+ |
 | CMake      | 3.5+    |            |
 | IrrlichtMt | -       | Custom version of Irrlicht, see https://github.com/minetest/irrlicht |
-| SQLite3    | 3.0+    |            |
+| Freetype   | 2.0+    |            |
+| SQLite3    | 3+      |            |
 | Zstd       | 1.0+    |            |
 | LuaJIT     | 2.0+    | Bundled Lua 5.1 is used if not present |
 | GMP        | 5.0.0+  | Bundled mini-GMP is used if not present |
@@ -143,12 +144,12 @@ Compiling
 
 For Debian/Ubuntu users:
 
-    sudo apt install g++ make libc6-dev cmake libpng-dev libjpeg-dev libxxf86vm-dev libgl1-mesa-dev libsqlite3-dev libogg-dev libvorbis-dev libopenal-dev libcurl4-gnutls-dev libfreetype6-dev zlib1g-dev libgmp-dev libjsoncpp-dev libzstd-dev
+    sudo apt install g++ make libc6-dev cmake libpng-dev libjpeg-dev libxxf86vm-dev libgl1-mesa-dev libsqlite3-dev libogg-dev libvorbis-dev libopenal-dev libcurl4-gnutls-dev libfreetype6-dev zlib1g-dev libgmp-dev libjsoncpp-dev libzstd-dev libluajit-5.1-dev
 
 For Fedora users:
 
     sudo dnf install make automake gcc gcc-c++ kernel-devel cmake libcurl-devel openal-soft-devel libvorbis-devel libXxf86vm-devel libogg-devel freetype-devel mesa-libGL-devel zlib-devel jsoncpp-devel gmp-devel sqlite-devel luajit-devel leveldb-devel ncurses-devel spatialindex-devel libzstd-devel
-    
+
 For Arch users:
 
     sudo pacman -S base-devel libcurl-gnutls cmake libxxf86vm libpng sqlite libogg libvorbis openal freetype2 jsoncpp gmp luajit leveldb ncurses zstd
@@ -159,24 +160,14 @@ For Alpine users:
 
 #### Download
 
-You can install Git for easily keeping your copy up to date.
-If you don’t want Git, read below on how to get the source without Git.
-This is an example for installing Git on Debian/Ubuntu:
-
-    sudo apt install git
-
-For Fedora users:
-
-    sudo dnf install git
-
-Download source (this is the URL to the latest of source repository, which might not work at all times) using Git:
+Clone the source (this is the URL to the latest of source repository, which might not work at all times) using Git:
 
     git clone --depth 1 https://github.com/minetest/minetest.git
     cd minetest
 
-Download minetest_game (otherwise only the "Development Test" game is available) using Git:
+Clone the KetchupLand game (otherwise only the "Development Test" game is available) using Git:
 
-    git clone --depth 1 https://github.com/minetest/minetest_game.git games/minetest_game
+    git clone --depth 1 https://github.com/KetchupLand/KetchupLand games/ketchupland
 
 Download IrrlichtMt to `lib/irrlichtmt`, it will be used to satisfy the IrrlichtMt dependency that way:
 
@@ -224,7 +215,6 @@ General options and their default values:
         MinSizeRel             - Release build with -Os passed to compiler to make executable as small as possible
     ENABLE_CURL=ON             - Build with cURL; Enables use of online mod repo, public serverlist and remote media fetching via http
     ENABLE_CURSES=ON           - Build with (n)curses; Enables a server side terminal (command line option: --terminal)
-    ENABLE_FREETYPE=ON         - Build with FreeType2; Allows using TTF fonts
     ENABLE_GETTEXT=ON          - Build with Gettext; Allows using translations
     ENABLE_GLES=OFF            - Build for OpenGL ES instead of OpenGL (requires support by IrrlichtMt)
     ENABLE_LEVELDB=ON          - Build with LevelDB; Enables use of LevelDB map backend
@@ -250,10 +240,10 @@ Library specific options:
     EGL_INCLUDE_DIR                 - Only if building with GLES; directory that contains egl.h
     EGL_LIBRARY                     - Only if building with GLES; path to libEGL.a/libEGL.so
     EXTRA_DLL                       - Only on Windows; optional paths to additional DLLs that should be packaged
-    FREETYPE_INCLUDE_DIR_freetype2  - Only if building with FreeType 2; directory that contains an freetype directory with files such as ftimage.h in it
-    FREETYPE_INCLUDE_DIR_ft2build   - Only if building with FreeType 2; directory that contains ft2build.h
-    FREETYPE_LIBRARY                - Only if building with FreeType 2; path to libfreetype.a/libfreetype.so/freetype.lib
-    FREETYPE_DLL                    - Only if building with FreeType 2 on Windows; path to libfreetype.dll
+    FREETYPE_INCLUDE_DIR_freetype2  - Directory that contains files such as ftimage.h
+    FREETYPE_INCLUDE_DIR_ft2build   - Directory that contains ft2build.h
+    FREETYPE_LIBRARY                - Path to libfreetype.a/libfreetype.so/freetype.lib
+    FREETYPE_DLL                    - Only on Windows; path to libfreetype-6.dll
     GETTEXT_DLL                     - Only when building with gettext on Windows; paths to libintl + libiconv DLLs
     GETTEXT_INCLUDE_DIR             - Only when building with gettext; directory that contains iconv.h
     GETTEXT_LIBRARY                 - Only when building with gettext on Windows; path to libintl.dll.a
@@ -314,7 +304,6 @@ vcpkg install zlib zstd curl[winssl] openal-soft libvorbis libogg libjpeg-turbo 
 - **Don't forget about IrrlichtMt.** The easiest way is to clone it to `lib/irrlichtmt` as described in the Linux section.
 - `curl` is optional, but required to read the serverlist, `curl[winssl]` is required to use the content store.
 - `openal-soft`, `libvorbis` and `libogg` are optional, but required to use sound.
-- `freetype` is optional, it allows true-type font rendering.
 - `luajit` is optional, it replaces the integrated Lua interpreter with a faster just-in-time interpreter.
 - `gmp` and `jsoncpp` are optional, otherwise the bundled versions will be compiled
 
