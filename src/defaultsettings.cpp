@@ -310,10 +310,12 @@ void set_default_settings()
 	settings->setDefault("font_italic", "false");
 	settings->setDefault("font_shadow", "0");
 	settings->setDefault("font_shadow_alpha", "0");
+	settings->setDefault("font_size_divisible_by", "16");
 	settings->setDefault("mono_font_path", porting::getDataPath("fonts" DIR_DELIM "Unifont.ttf"));
 	settings->setDefault("mono_font_path_italic", porting::getDataPath("fonts" DIR_DELIM "Unifont.ttf"));
 	settings->setDefault("mono_font_path_bold", porting::getDataPath("fonts" DIR_DELIM "Unifont.ttf"));
 	settings->setDefault("mono_font_path_bold_italic", porting::getDataPath("fonts" DIR_DELIM "Unifont.ttf"));
+	settings->setDefault("mono_font_size_divisible_by", "16");
 	settings->setDefault("fallback_font_path", porting::getDataPath("fonts" DIR_DELIM "Unifont.ttf"));
 
 	std::string font_size_str = std::to_string(TTF_DEFAULT_FONT_SIZE);
