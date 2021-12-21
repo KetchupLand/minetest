@@ -51,32 +51,6 @@ jobs:
         run: |
           ./bin/ketchupland --run-unittests
 
-  # This is the current clang version
-  clang_9:
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install deps
-        run: |
-          source ./util/ci/common.sh
-          install_linux_deps clang-9 valgrind libluajit-5.1-dev
-
-      - name: Build
-        run: |
-          ./util/ci/build.sh
-        env:
-          CC: clang-9
-          CXX: clang++-9
-          CMAKE_FLAGS: "-DREQUIRE_LUAJIT=1"
-
-      - name: Test
-        run: |
-          ./bin/ketchupland --run-unittests
-
-      - name: Valgrind
-        run: |
-          valgrind --leak-check=full --leak-check-heuristics=all --undef-value-errors=no --error-exitcode=9 ./bin/ketchupland --run-unittests
-
   win32:
     name: "MinGW cross-compiler (32-bit)"
     runs-on: ubuntu-18.04
@@ -91,9 +65,11 @@ jobs:
       - name: Build
         run: |
            EXISTING_MINETEST_DIR=$PWD ./util/buildbot/buildwin32.sh winbuild
-        env:
-          NO_MINETEST_GAME: 1
-          NO_PACKAGE: 1
+
+      - name: Upload output as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          path: winbuild/build/ketchupland-*-win32.zip
 
   win64:
     name: "MinGW cross-compiler (64-bit)"
@@ -109,6 +85,8 @@ jobs:
       - name: Build
         run: |
           EXISTING_MINETEST_DIR=$PWD ./util/buildbot/buildwin64.sh winbuild
-        env:
-          NO_MINETEST_GAME: 1
-          NO_PACKAGE: 1
+
+      - name: Upload output as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          path: winbuild/build/ketchupland-*-win64.zip
