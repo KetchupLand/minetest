@@ -90,8 +90,8 @@ if [ -n "$EXISTING_MINETEST_DIR" ]; then
 	sourcedir="$( cd "$EXISTING_MINETEST_DIR" && pwd )"
 
 	cd $sourcedir
-	[ -d games/$GAME_NAME ] && { pushd games/$GAME_NAME; git pull; popd; } || \
-		git clone --depth 1 -b $GAME_BRANCH $GAME_GIT games/$GAME_NAME
+	git submodule init
+	git submodule update
 else
 	sourcedir=$PWD/$CORE_NAME
 	[ -d $CORE_NAME ] && { pushd $CORE_NAME; git pull; popd; } || \
