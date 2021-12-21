@@ -1,0 +1,3 @@
+[submodule "games/ketchupland"]
+	path = games/ketchupland
+	url = https://github.com/KetchupLand/KetchupLand
