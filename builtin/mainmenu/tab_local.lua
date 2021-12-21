@@ -118,7 +118,7 @@ local function get_formspec(tabview, name, tabdata)
 	local host = ''
 
 	if core.settings:get_bool("enable_server") then
-		host = 	"button[7.9,4.75;4.1,1;play;".. fgettext("Host Game") .. "]" ..
+		host = 	"button[3.9,4.75;8.1,1;play;".. fgettext("Host Game") .. "]" ..
 				"checkbox[0,1.2;cb_server_announce;" .. fgettext("Announce Server") .. ";" ..
 				dump(core.settings:get_bool("server_announce")) .. "]" ..
 				"field[0.3,2.85;3.8,0.5;te_playername;" .. fgettext("Name") .. ";" ..
