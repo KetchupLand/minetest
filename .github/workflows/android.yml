@@ -3,13 +3,6 @@ name: android
 # build on c/cpp changes or workflow changes
 on:
   push:
-    paths:
-      - 'lib/**.[ch]'
-      - 'lib/**.cpp'
-      - 'src/**.[ch]'
-      - 'src/**.cpp'
-      - 'android/**'
-      - '.github/workflows/android.yml'
   pull_request:
     paths:
       - 'lib/**.[ch]'

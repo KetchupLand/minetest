@@ -3,18 +3,6 @@ name: build
 # build on c/cpp changes or workflow changes
 on:
   push:
-    paths:
-      - 'lib/**.[ch]'
-      - 'lib/**.cpp'
-      - 'src/**.[ch]'
-      - 'src/**.cpp'
-      - '**/CMakeLists.txt'
-      - 'cmake/Modules/**'
-      - 'util/buildbot/**'
-      - 'util/ci/**'
-      - '.github/workflows/**.yml'
-      - 'Dockerfile'
-      - '.dockerignore'
   pull_request:
     paths:
       - 'lib/**.[ch]'
