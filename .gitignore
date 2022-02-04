@@ -111,6 +111,11 @@ compile_commands.json
 *.vcxproj*
 *.sln
 .vs/
+build-*/
 
 # Optional user provided library folder
 lib/irrlichtmt
+winbuild64
+
+# Generated mod storage database
+client/mod_storage.sqlite
