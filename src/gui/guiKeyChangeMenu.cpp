@@ -432,19 +432,11 @@ void GUIKeyChangeMenu::init_keys()
 	this->add_key(GUI_ID_KEY_FAST_BUTTON,         wgettext("Toggle fast"),      "keymap_fastmove");
 	this->add_key(GUI_ID_KEY_NOCLIP_BUTTON,       wgettext("Toggle noclip"),    "keymap_noclip");
 	this->add_key(GUI_ID_KEY_MUTE_BUTTON,         wgettext("Mute"),             "keymap_mute");
-	this->add_key(GUI_ID_KEY_DEC_VOLUME_BUTTON,   wgettext("Dec. volume"),      "keymap_decrease_volume");
-	this->add_key(GUI_ID_KEY_INC_VOLUME_BUTTON,   wgettext("Inc. volume"),      "keymap_increase_volume");
-	this->add_key(GUI_ID_KEY_AUTOFWD_BUTTON,      wgettext("Autoforward"),      "keymap_autoforward");
 	this->add_key(GUI_ID_KEY_CHAT_BUTTON,         wgettext("Chat"),             "keymap_chat");
 	this->add_key(GUI_ID_KEY_SCREENSHOT_BUTTON,   wgettext("Screenshot"),       "keymap_screenshot");
 	this->add_key(GUI_ID_KEY_RANGE_BUTTON,        wgettext("Range select"),     "keymap_rangeselect");
 	this->add_key(GUI_ID_KEY_DEC_RANGE_BUTTON,    wgettext("Dec. range"),       "keymap_decrease_viewing_range_min");
 	this->add_key(GUI_ID_KEY_INC_RANGE_BUTTON,    wgettext("Inc. range"),       "keymap_increase_viewing_range_min");
-	this->add_key(GUI_ID_KEY_CONSOLE_BUTTON,      wgettext("Console"),          "keymap_console");
-	this->add_key(GUI_ID_KEY_CMD_BUTTON,          wgettext("Command"),          "keymap_cmd");
-	this->add_key(GUI_ID_KEY_CMD_LOCAL_BUTTON,    wgettext("Local command"),    "keymap_cmd_local");
-	this->add_key(GUI_ID_KEY_BLOCK_BOUNDS_BUTTON, wgettext("Block bounds"),     "keymap_toggle_block_bounds");
 	this->add_key(GUI_ID_KEY_HUD_BUTTON,          wgettext("Toggle HUD"),       "keymap_toggle_hud");
 	this->add_key(GUI_ID_KEY_CHATLOG_BUTTON,      wgettext("Toggle chat log"),  "keymap_toggle_chat");
-	this->add_key(GUI_ID_KEY_FOG_BUTTON,          wgettext("Toggle fog"),       "keymap_toggle_fog");
 }
