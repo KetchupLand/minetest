@@ -113,8 +113,16 @@ If you want to specify multiple images for one identifier, add additional
 images named like `$identifier.$n.png`, with an ascending number $n starting
 with 1, and a random image will be chosen from the provided ones.
 
+Menu music
+-----------
 
+Games can provide custom main menu music. They are put inside a `menu`
+directory inside the game directory.
 
+The music files are named `theme.ogg`.
+If you want to specify multiple music files for one game, add additional
+images named like `theme.$n.ogg`, with an ascending number $n starting
+with 1 (max 10), and a random music file will be chosen from the provided ones.
 
 Mods
 ====
@@ -205,10 +213,34 @@ A `Settings` file that provides meta information about the mod.
              internal ID used to track versions.
 * `title`: A human-readable title to address the mod.
 
+Note: to support 0.4.x, please also provide depends.txt.
+
 ### `screenshot.png`
 
 A screenshot shown in the mod manager within the main menu. It should
 have an aspect ratio of 3:2 and a minimum size of 300×200 pixels.
+
+### `depends.txt`
+
+**Deprecated:** you should use mod.conf instead.
+
+This file is used if there are no dependencies in mod.conf.
+
+List of mods that have to be loaded before loading this mod.
+
+A single line contains a single modname.
+
+Optional dependencies can be defined by appending a question mark
+to a single modname. This means that if the specified mod
+is missing, it does not prevent this mod from being loaded.
+
+### `description.txt`
+
+**Deprecated:** you should use mod.conf instead.
+
+This file is used if there is no description in mod.conf.
+
+A file containing a description to be shown in the Mods tab of the main menu.
 
 ### `settingtypes.txt`
 
@@ -332,6 +364,36 @@ Deprecated for non-V6 mapgens, define cave liquids in biome definitions instead.
 
 Fallback node used if dungeon nodes are not defined in biome definitions.
 Deprecated for non-V6 mapgens, define dungeon nodes in biome definitions instead.
+
+### Aliases needed for Mapgen V6
+
+* mapgen_stone
+* mapgen_water_source
+* mapgen_lava_source
+* mapgen_dirt
+* mapgen_dirt_with_grass
+* mapgen_sand
+* mapgen_gravel
+* mapgen_desert_stone
+* mapgen_desert_sand
+* mapgen_dirt_with_snow
+* mapgen_snowblock
+* mapgen_snow
+* mapgen_ice
+
+* mapgen_tree
+* mapgen_leaves
+* mapgen_apple
+* mapgen_jungletree
+* mapgen_jungleleaves
+* mapgen_junglegrass
+* mapgen_pine_tree
+* mapgen_pine_needles
+
+* mapgen_cobble
+* mapgen_stair_cobble
+* mapgen_mossycobble
+* mapgen_stair_desert_stone
 
 ### Setting the node used in Mapgen Singlenode
 
@@ -2266,9 +2328,20 @@ Elements
 * `position` and `anchor` elements need suitable values to avoid a formspec
   extending off the game window due to particular game window sizes.
 
-### `no_prepend[]`
+### `padding[<X>,<Y>]`
 
 * Must be used after the `size`, `position`, and `anchor` elements (if present).
+* Defines how much space is padded around the formspec if the formspec tries to
+  increase past the size of the screen and coordinates have to be shrunk.
+* For X and Y, 0.0 represents no padding (the formspec can touch the edge of the
+  screen), and 0.5 represents half the screen (which forces the coordinate size
+  to 0). If negative, the formspec can extend off the edge of the screen.
+* Defaults to [0.05, 0.05].
+
+### `no_prepend[]`
+
+* Must be used after the `size`, `position`, `anchor`, and `padding` elements
+  (if present).
 * Disables player:set_formspec_prepend() from applying to this formspec.
 
 ### `real_coordinates[<bool>]`
@@ -2315,20 +2388,22 @@ Elements
 * End of a scroll_container, following elements are no longer bound to this
   container.
 
-### `list[<inventory location>;<list name>;<X>,<Y>;<W>,<H>;]`
+### `list[<inventory location>;<list name>;<X>,<Y>;<W>,<H>;<starting item index>]`
 
-* Show an inventory list if it has been sent to the client. Nothing will
-  be shown if the inventory list is of size 0.
+* Show an inventory list if it has been sent to the client.
+* If the inventory list changes (eg. it didn't exist before, it's resized, or its items
+  are moved) while the formspec is open, the formspec element may (but is not guaranteed
+  to) adapt to the new inventory list.
+* Item slots are drawn in a grid from left to right, then up to down, ordered
+  according to the slot index.
+* `W` and `H` are in inventory slots, not in coordinates.
+* `starting item index` (Optional): The index of the first (upper-left) item to draw.
+  Indices start at `0`. Default is `0`.
+* The number of shown slots is the minimum of `W*H` and the inventory list's size minus
+  `starting item index`.
 * **Note**: With the new coordinate system, the spacing between inventory
   slots is one-fourth the size of an inventory slot by default. Also see
   [Styling Formspecs] for changing the size of slots and spacing.
-
-### `list[<inventory location>;<list name>;<X>,<Y>;<W>,<H>;<starting item index>]`
-
-* Show an inventory list if it has been sent to the client. Nothing will
-  be shown if the inventory list is of size 0.
-* **Note**: With the new coordinate system, the spacing between inventory
-  slots is one-fourth the size of an inventory slot.
 
 ### `listring[<inventory location>;<list name>]`
 
@@ -4587,6 +4662,19 @@ Utilities
 * `minetest.mkdir(path)`: returns success.
     * Creates a directory specified by `path`, creating parent directories
       if they don't exist.
+* `minetest.rmdir(path, recursive)`: returns success.
+    * Removes a directory specified by `path`.
+    * If `recursive` is set to `true`, the directory is recursively removed.
+      Otherwise, the directory will only be removed if it is empty.
+    * Returns true on success, false on failure.
+* `minetest.cpdir(source, destination)`: returns success.
+    * Copies a directory specified by `path` to `destination`
+    * Any files in `destination` will be overwritten if they already exist.
+    * Returns true on success, false on failure.
+* `minetest.mvdir(source, destination)`: returns success.
+    * Moves a directory specified by `path` to `destination`.
+    * If the `destination` is a non-empty directory, then the move will fail.
+    * Returns true on success, false on failure.
 * `minetest.get_dir_list(path, [is_dir])`: returns list of entry names
     * is_dir is one of:
         * nil: return all entries,
@@ -6791,7 +6879,9 @@ object you are working with still exists.
         * `visible`: Boolean for whether the moon is visible.
             (default: `true`)
         * `texture`: A regular texture for the moon. Setting to `""`
-            will re-enable the mesh moon. (default: "moon.png", if it exists)
+            will re-enable the mesh moon. (default: `"moon.png"`, if it exists)
+            Note: Relative to the sun, the moon texture is rotated by 180°.
+            You can use the `^[transformR180` texture modifier to achieve the same orientation.
         * `tonemap`: A 512x1 texture containing the tonemap for the moon
             (default: `"moon_tonemap.png"`)
         * `scale`: Float controlling the overall size of the moon (default: `1`)
