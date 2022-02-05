@@ -606,26 +606,26 @@ local function create_change_setting_formspec(dialogdata)
 		end
 		-- First row
 		height = height + 0.3
-		add_field(0.3, "te_offset", fgettext("Offset"), t[1])
-		add_field(3.6, "te_scale",  fgettext("Scale"),  t[2])
-		add_field(6.9, "te_seed",   fgettext("Seed"),   t[6])
+		add_field(0.3, "te_offset", "Offset", t[1])
+		add_field(3.6, "te_scale",  "Scale",  t[2])
+		add_field(6.9, "te_seed",   "Seed",   t[6])
 		height = height + 1.1
 
 		-- Second row
-		add_field(0.3, "te_spreadx", fgettext("X spread"), t[3])
+		add_field(0.3, "te_spreadx", "X spread", t[3])
 		if dimension == 3 then
-			add_field(3.6, "te_spready", fgettext("Y spread"), t[4])
+			add_field(3.6, "te_spready", "Y spread", t[4])
 		else
 			fields[#fields + 1] = "label[4," .. height - 0.2 .. ";" ..
-					fgettext("2D Noise") .. "]"
+					"2D Noise" .. "]"
 		end
-		add_field(6.9, "te_spreadz", fgettext("Z spread"), t[5])
+		add_field(6.9, "te_spreadz", "Z spread", t[5])
 		height = height + 1.1
 
 		-- Third row
-		add_field(0.3, "te_octaves", fgettext("Octaves"),     t[7])
-		add_field(3.6, "te_persist", fgettext("Persistence"), t[8])
-		add_field(6.9, "te_lacun",   fgettext("Lacunarity"),  t[9])
+		add_field(0.3, "te_octaves", "Octaves",     t[7])
+		add_field(3.6, "te_persist", "Persistence", t[8])
+		add_field(6.9, "te_lacun",   "Lacunarity",  t[9])
 		height = height + 1.1
 
 
@@ -646,21 +646,21 @@ local function create_change_setting_formspec(dialogdata)
 				--[[~ "defaults" is a noise parameter flag.
 				It describes the default processing options
 				for noise settings in main menu -> "All Settings". ]]
-				.. fgettext("defaults") .. ";" -- defaults
+				.. "defaults" .. ";" -- defaults
 				.. tostring(flags["defaults"] == true) .. "]" -- to get false if nil
 				.. "checkbox[5," .. height - 0.6 .. ";cb_eased;"
 				--[[~ "eased" is a noise parameter flag.
 				It is used to make the map smoother and
 				can be enabled in noise settings in
 				main menu -> "All Settings". ]]
-				.. fgettext("eased") .. ";" -- eased
+				.. "eased" .. ";" -- eased
 				.. tostring(flags["eased"] == true) .. "]"
 				.. "checkbox[5," .. height - 0.15 .. ";cb_absvalue;"
 				--[[~ "absvalue" is a noise parameter flag.
 				It is short for "absolute value".
 				It can be enabled in noise settings in
 				main menu -> "All Settings". ]]
-				.. fgettext("absvalue") .. ";" -- absvalue
+				.. "absvalue" .. ";" -- absvalue
 				.. tostring(flags["absvalue"] == true) .. "]"
 		height = height + 1
 
@@ -674,13 +674,13 @@ local function create_change_setting_formspec(dialogdata)
 		height = height + 0.3
 		formspec = formspec
 				.. "field[0.3," .. height .. ";3.3,1;te_x;"
-				.. fgettext("X") .. ";" -- X
+				.. "X;" -- X
 				.. core.formspec_escape(v3f[1] or "") .. "]"
 				.. "field[3.6," .. height .. ";3.3,1;te_y;"
-				.. fgettext("Y") .. ";" -- Y
+				.. "Y;" -- Y
 				.. core.formspec_escape(v3f[2] or "") .. "]"
 				.. "field[6.9," .. height .. ";3.3,1;te_z;"
-				.. fgettext("Z") .. ";" -- Z
+				.. "Z;" -- Z
 				.. core.formspec_escape(v3f[3] or "") .. "]"
 		height = height + 1.1
 
@@ -775,15 +775,15 @@ local function create_change_setting_formspec(dialogdata)
 
 	local setting_name = setting.name
 	if setting.readable_name then
-		setting_name = fgettext_ne(setting.readable_name) ..
+		setting_name = setting.readable_name ..
 			" (" .. setting.name .. ")"
 	end
 
 	local comment_text
 	if setting.comment == "" then
-		comment_text = fgettext_ne("(No description of setting given)")
+		comment_text = "(No description of setting given)"
 	else
-		comment_text = fgettext_ne(setting.comment)
+		comment_text = setting.comment
 	end
 
 	return (
@@ -961,14 +961,14 @@ local function create_settings_formspec(tabview, _, tabdata)
 	for _, entry in ipairs(settings) do
 		local name
 		if not core.settings:get_bool("main_menu_technical_settings") and entry.readable_name then
-			name = fgettext_ne(entry.readable_name)
+			name = entry.readable_name
 		else
 			name = entry.name
 		end
 
 		if entry.type == "category" then
 			current_level = entry.level
-			formspec = formspec .. "#FFFF00," .. current_level .. "," .. fgettext(name) .. ",,"
+			formspec = formspec .. "#FFFF00," .. current_level .. "," .. name .. ",,"
 
 		elseif entry.type == "bool" then
 			local value = get_current_value(entry)
